@@ -1,0 +1,13 @@
+Info,  T2800: Load C:\Users\StroboPC\Desktop\progetto_IG\triciclo_example.obj
+Info,  T2800: Found a matching importer for this file format
+Info,  T2800: Import root directory is 'C:\Users\StroboPC\Desktop\progetto_IG\'
+Error, T2800: OBJ/MTL: Unexpected illumination model (0-2 recognized)
+Skipping one or more lines with the same contents
+Info,  T2800: Entering post processing pipeline
+Info,  T2800: RemoveRedundantMatsProcess finished. 2 redundant and 1 unused materials
+Warn,  T2800: Found 180 degenerated primitives
+Info,  T2800: TriangulateProcess finished. All polygons have been triangulated.
+Info,  T2800: Points: 0, Lines: 0, Triangles: 5, Polygons: 0 (Meshes, X = removed)
+Info,  T2800: JoinVerticesProcess finished | Verts in: 1107428 out: 427109 | ~61.4%
+Info,  T2800: Cache relevant are 5 meshes (553528 faces). Average output ACMR is 0.994022
+Info,  T2800: Leaving post processing pipeline
