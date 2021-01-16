@@ -10,6 +10,10 @@
 // have this configuration built.
 // ----------------------------------------------------------------------------
 
+//NOSTRE LIBRERIE
+//#include "state.h"
+
+//FINE NOSTRE LIBRERIE
 
 // assimp include files. These three are usually needed.
 #include "assimp.h"
@@ -49,8 +53,8 @@ GLfloat LightPosition[]= { 0.0f, 0.0f, 15.0f, 1.0f };
 #define FALSE               0
 
 //VARIABILI NOSTRE
-float pos_x = 0.f;
-float pos_z = 0.f;
+float pos_x = 0.f; //posizione del triciclo su x
+float pos_z = 0.f; //posizione del triciclo su z (in realtà camera è ferma e punta a (0,0,0) e altri oggetti si spostano indietro di -pos_z)
 
 int prev_time = 0;
 bool isStarted = false;
@@ -338,7 +342,7 @@ void display(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//gluLookAt(0.f,7.f,5.f,0.f,0.f,0.f,0.f,1.f,0.f);
-	gluLookAt(0.f, 7.f, 5.f + pos_z, 0.f, 0.f, pos_z, 0.f, 1.f, 0.f);
+	gluLookAt(0.f, 3.f, 5.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
 	
 	// rotate it around the y axis
 	//COMMENTATO glRotatef(angle,0.f,1.f,0.f);
@@ -380,20 +384,20 @@ void display(void)
 		//CODICE NOSTRO
 	else {
 		glPushMatrix();
-			glTranslatef(5.f, 0.5f, 5.f);
+			glTranslatef(5.f, 0.f, 5.f-pos_z);
 			glRotatef(60.f, 0.f, 1.0f, 0.f);
 			glutSolidCube(1);
 		glPopMatrix();
 
 		glPushMatrix();
-			glTranslatef(-7.f, 0.5f, 8.f);
+			glTranslatef(-7.f, 0.f, 8.f-pos_z);
 			glRotatef(45.f, 0.f, 1.0f, 0.f);
 			glutSolidCube(1);
 		glPopMatrix();
 
 		glPushMatrix();
 			fprintf(stdout, "ReDisplay - traslo di: %f x , %f z\n", pos_x, pos_z);
-			glTranslatef(pos_x, 0.f, pos_z*2.185f);
+			glTranslatef(pos_x, 0.f, 0.f); //moltiplico per un fattore perchè altrimenti triciclo è troppo lento rispettoa camera
 			glTranslatef(0.f, 0.f, -8.f);
 			glRotatef(180.f, 0.f, 1.0f, 0.f);
 			recursive_render(scene, scene->mRootNode, 1.0);
