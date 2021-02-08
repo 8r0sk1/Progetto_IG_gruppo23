@@ -11,7 +11,7 @@
 // ----------------------------------------------------------------------------
 
 //NOSTRE LIBRERIE
-#include<stdlib.h>
+//#include<stdlib.h>
 #include "lib.h"
 
 //FINE NOSTRE LIBRERIE
@@ -54,11 +54,7 @@ GLfloat LightPosition[]= { 0.0f, 0.0f, 15.0f, 1.0f };
 #define FALSE               0
 
 //VARIABILI NOSTRE
-float pos_x = 0.f; //posizione del triciclo su x
-float pos_z = 0.f; //posizione del triciclo su z (in realtà camera è ferma e punta a (0,0,0) e altri oggetti si spostano indietro di -pos_z)
-
-int prev_time = 0;
-bool isStarted = false;
+GameManager gameManager;
 //FINE VARIABILI NOSTRE
 
 // ----------------------------------------------------------------------------
@@ -331,19 +327,6 @@ void do_motion (void)
 
 // ----------------------------------------------------------------------------
 
-bool isColliding(float player_x, float player_z, float x, float z, float edge) {
-	float x_min = x - edge / 2;
-	float x_max = x + edge / 2;
-
-	float z_min = z - edge / 2;
-	float z_max = z + edge / 2;
-
-	if (x_min < player_x && player_x < x_max && z_min < player_z && player_z < z_max) { //controllo che il player sia dentro al BBox
-		return true;
-	}
-	else return false;
-}
-
 void display(void)
 {
 	float tmp;
@@ -352,12 +335,12 @@ void display(void)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-5.0f,5.0f,-5.0f,5.0f,1.0f,100.0f);
+	glOrtho(-5.0f,5.0f,-5.0f,5.0f,1.0f,100.0f); //SETUP PROIEZIONE
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//gluLookAt(0.f,7.f,5.f,0.f,0.f,0.f,0.f,1.f,0.f);
-	gluLookAt(0.f, 3.f, 10.f, 0.f, 0.f, 5.f, 0.f, 1.f, 0.f);
+	gluLookAt(0.f, 3.f, 10.f, 0.f, 0.f, 5.f, 0.f, 1.f, 0.f); //SETUP CAMERA
 	
 	// rotate it around the y axis
 	//COMMENTATO glRotatef(angle,0.f,1.f,0.f);
@@ -383,53 +366,46 @@ void display(void)
             // together on GL's matrix stack.
 		//COMMENTATO recursive_render(scene, scene->mRootNode, 1.0);
 
-		//CODICE NOSTRO
-		/*
-		glPushMatrix();
-			fprintf(stdout, "ReDisplay - traslo di: %f x , %f z\n", pos_x, pos_z);
-			glTranslatef(pos_x, 0.f, pos_z);
-			glTranslatef(0.f,0.f,-8.f);
-			glRotatef(180.f, 0.f, 1.0f, 0.f);
-			recursive_render(scene, scene->mRootNode, 1.0);
-		glPopMatrix(); */
-		//FINE CODICE NOSTRO
-
 	    glEndList();
 	}
-		//CODICE NOSTRO
+	
+	//CODICE NOSTRO
 
 	//se gioco iniziato
-	else if (isStarted) {
-		GameObj cube1 = GameObj(5.f, 10.f, 0.f, 2.f, 2.f);
-		glPushMatrix();
+	else if (gameManager.state == play) {
+		GameObj cube1 = GameObj(5.f, 10.f, 60.f, 2.f, 2.f);
+		gameManager.drawObj(cube1);
+		/*glPushMatrix();
 			glTranslatef(5.f, 0.f, 10.f-pos_z);
 			glRotatef(60.f, 0.f, 1.0f, 0.f);
 			glutSolidCube(1);
-		glPopMatrix();
+		glPopMatrix();*/
 
-		GameObj cube2 = GameObj(-7.f, 8.f, 0.f, 3.f, 3.f);
-		glPushMatrix();
+		GameObj cube2 = GameObj(-7.f, 8.f, 45.f, 3.f, 3.f);
+		gameManager.drawObj(cube2); //passo player_z per movimento ambiente all'indietro
+		/*glPushMatrix();
 			glTranslatef(-7.f, 0.f, 8.f-pos_z);
 			glRotatef(45.f, 0.f, 1.0f, 0.f);
 			glutSolidCube(1);
-		glPopMatrix();
+		glPopMatrix();*/
 
-		glPushMatrix();
+		gameManager.drawPlayer(); //player è sempre disegnato in z=0;
+		/*glPushMatrix();
 			//fprintf(stdout, "ReDisplay - traslo di: %f x , %f z\n", pos_x, pos_z);
 			glTranslatef(pos_x, 0.f, 0.f);
 			//glTranslatef(0.f, 0.f, -8.f); //traslazione per la camera
 			glRotatef(180.f, 0.f, 1.0f, 0.f);
 			glutSolidSphere(0.5,12,12);
 			//recursive_render(scene, scene->mRootNode, 1.0);
-		glPopMatrix();
+		glPopMatrix();*/
 
-		if (cube1.isColliding(pos_x, pos_z)) {
+		if (cube1.isColliding(gameManager.player.x, gameManager.player.z)) {
 			fprintf(stdout, "Collisione con CUBE1\n");
-			reset(&isStarted,&pos_x,&pos_z);
+			gameManager.state = paused;
 		}
-		if (cube2.isColliding(pos_x, pos_z)) {
+		if (cube2.isColliding(gameManager.player.x, gameManager.player.z)) {
 			fprintf(stdout, "Collisione con CUBE2\n");
-			exit(0);
+			gameManager.state = paused;
 		}
 	}
 	//se gioco non iniziato
@@ -454,7 +430,7 @@ void display(void)
 		//recursive_render(scene, scene->mRootNode, 1.0);
 		glPopMatrix();
 	}
-		//FINE CODICE NOSTRO
+	//FINE CODICE NOSTRO
 
 	glCallList(scene_list);
 
@@ -622,38 +598,13 @@ int InitGL()					 // All Setup For OpenGL goes here
 
 //CODICE NOSTRO
 void keyboard(unsigned char key, int x, int y) {
-
-	fprintf(stdout,"Key pressed: %c\n",key);
-
-	switch (key) {
-	case 'a':
-		if (isStarted) pos_x += -0.25f;
-		fprintf(stdout, "pos_x = %f\n", pos_x);
-		break;
-	case 'd':
-		if (isStarted) pos_x += 0.25f;
-		fprintf(stdout, "pos_x = %f\n", pos_x);
-		break;
-	//spacebar
-	case 32:
-		isStarted = true;
-		fprintf(stdout, "isStarted = %d\n",isStarted);
-		break;
-	//reset
-	case 'r':
-		pos_x = pos_z = 0;
-		isStarted = false;
-		break;
-	}
-
-	glutPostRedisplay();
+	gameManager.inputManager(key, x, y);
 	return;
 }
 
 void idle() {
 	int time = glutGet(GLUT_ELAPSED_TIME);
-	if (isStarted) pos_z += (float)(time - prev_time) * 0.003f;
-	prev_time = time;
+	gameManager.my_idle(time);
 	glutPostRedisplay();
 	return;
 }
@@ -687,7 +638,7 @@ int main(int argc, char **argv)
 
 	// the model name can be specified on the command line.
 
-	loadasset("C:\\Users\\StroboPC\\Desktop\\progetto_IG\\triciclo_example.obj");
+	loadasset("..\\..\\triciclo_example.obj");
 
 	/*COMMENTO
 	if(argc>=2)
@@ -707,6 +658,8 @@ int main(int argc, char **argv)
 	//CODICE NOSTRO
 	glutKeyboardFunc(keyboard);
 	glutIdleFunc(idle);
+
+	gameManager = GameManager(); //inizializzo il GameManager
 	//FINE CODICE NOSTRO
 
 

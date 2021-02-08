@@ -1,8 +1,11 @@
 #include "GameObj.h"
+#include "GL/glut.h"
 
 	float x = 0.f, z= 0.f; //posizione (x,z)
 	float angle = 0.f; //angolo di rotazione attorno ad y
-	float dim_x = 0.f, dim_z = 0.f; //dimensioni dell'oggetto
+	float dim_x = 2.f, dim_z = 2.f; //dimensioni dell'oggetto
+
+	GameObj::GameObj() {};
 
 	GameObj::GameObj(float pos_x, float pos_z) {
 		x = pos_x;
@@ -33,6 +36,7 @@
 		else return false;
 	}
 
-	int GameObj::trial() {
-		return 1;
+	void GameObj::moveOf(float xs, float zs) {
+		x += xs;
+		z += zs;
 	}

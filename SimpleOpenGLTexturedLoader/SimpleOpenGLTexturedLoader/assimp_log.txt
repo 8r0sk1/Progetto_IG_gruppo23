@@ -1,13 +1,11 @@
-Info,  T12076: Load C:\Users\StroboPC\Desktop\progetto_IG\triciclo_example.obj
-Info,  T12076: Found a matching importer for this file format
-Info,  T12076: Import root directory is 'C:\Users\StroboPC\Desktop\progetto_IG\'
-Error, T12076: OBJ/MTL: Unexpected illumination model (0-2 recognized)
-Skipping one or more lines with the same contents
-Info,  T12076: Entering post processing pipeline
-Info,  T12076: RemoveRedundantMatsProcess finished. 2 redundant and 1 unused materials
-Warn,  T12076: Found 180 degenerated primitives
-Info,  T12076: TriangulateProcess finished. All polygons have been triangulated.
-Info,  T12076: Points: 0, Lines: 0, Triangles: 5, Polygons: 0 (Meshes, X = removed)
-Info,  T12076: JoinVerticesProcess finished | Verts in: 1107428 out: 427109 | ~61.4%
-Info,  T12076: Cache relevant are 5 meshes (553528 faces). Average output ACMR is 0.994022
-Info,  T12076: Leaving post processing pipeline
+Info,  T12844: Load ..\..\triciclo_example.obj
+Info,  T12844: Found a matching importer for this file format
+Info,  T12844: Import root directory is '..\..\'
+Error, T12844: OBJ: Unable to locate material file triciclo_example.mtl
+Info,  T12844: Entering post processing pipeline
+Warn,  T12844: Found 180 degenerated primitives
+Info,  T12844: TriangulateProcess finished. All polygons have been triangulated.
+Info,  T12844: Points: 0, Lines: 0, Triangles: 1, Polygons: 0 (Meshes, X = removed)
+Info,  T12844: JoinVerticesProcess finished | Verts in: 1107428 out: 426544 | ~61.5%
+Info,  T12844: Cache relevant are 1 meshes (553528 faces). Average output ACMR is 0.993070
+Info,  T12844: Leaving post processing pipeline

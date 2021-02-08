@@ -1,3 +1,4 @@
 #include "GameObj.h"
-
-void reset(bool* isStarted, float* x, float* y);
+#include "GameManager.h"
+#include <stdlib.h>
+#include "Gl/glut.h"
