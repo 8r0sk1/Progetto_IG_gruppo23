@@ -1,11 +1,11 @@
-Info,  T12844: Load ..\..\triciclo_example.obj
-Info,  T12844: Found a matching importer for this file format
-Info,  T12844: Import root directory is '..\..\'
-Error, T12844: OBJ: Unable to locate material file triciclo_example.mtl
-Info,  T12844: Entering post processing pipeline
-Warn,  T12844: Found 180 degenerated primitives
-Info,  T12844: TriangulateProcess finished. All polygons have been triangulated.
-Info,  T12844: Points: 0, Lines: 0, Triangles: 1, Polygons: 0 (Meshes, X = removed)
-Info,  T12844: JoinVerticesProcess finished | Verts in: 1107428 out: 426544 | ~61.5%
-Info,  T12844: Cache relevant are 1 meshes (553528 faces). Average output ACMR is 0.993070
-Info,  T12844: Leaving post processing pipeline
+Info,  T9380: Load ..\..\triciclo_example.obj
+Info,  T9380: Found a matching importer for this file format
+Info,  T9380: Import root directory is '..\..\'
+Error, T9380: OBJ: Unable to locate material file triciclo_example.mtl
+Info,  T9380: Entering post processing pipeline
+Warn,  T9380: Found 180 degenerated primitives
+Info,  T9380: TriangulateProcess finished. All polygons have been triangulated.
+Info,  T9380: Points: 0, Lines: 0, Triangles: 1, Polygons: 0 (Meshes, X = removed)
+Info,  T9380: JoinVerticesProcess finished | Verts in: 1107428 out: 426544 | ~61.5%
+Info,  T9380: Cache relevant are 1 meshes (553528 faces). Average output ACMR is 0.993070
+Info,  T9380: Leaving post processing pipeline

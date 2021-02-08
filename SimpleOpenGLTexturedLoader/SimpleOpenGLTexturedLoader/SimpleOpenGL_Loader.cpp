@@ -333,14 +333,17 @@ void display(void)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(-5.0f,5.0f,-5.0f,5.0f,1.0f,100.0f); //SETUP PROIEZIONE
+	//SETUP PER PLAY
+	if (gameManager.state == play || gameManager.state == paused || gameManager.state == dead) {
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-5.0f, 5.0f, -5.0f, 5.0f, 1.0f, 100.0f); //SETUP PROIEZIONE
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	//gluLookAt(0.f,7.f,5.f,0.f,0.f,0.f,0.f,1.f,0.f);
-	gluLookAt(0.f, 3.f, 10.f, 0.f, 0.f, 5.f, 0.f, 1.f, 0.f); //SETUP CAMERA
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		//gluLookAt(0.f,7.f,5.f,0.f,0.f,0.f,0.f,1.f,0.f);
+		gluLookAt(0.f, 3.f, 10.f, 0.f, 0.f, 5.f, 0.f, 1.f, 0.f); //SETUP CAMERA
+	}
 	
 	// rotate it around the y axis
 	//COMMENTATO glRotatef(angle,0.f,1.f,0.f);
@@ -357,79 +360,22 @@ void display(void)
 
         // if the display list has not been made yet, create a new one and
         // fill it with scene contents
-	if(scene_list == 0) {
-	    scene_list = glGenLists(1);
-	    glNewList(scene_list, GL_COMPILE);
+	if (scene_list == 0) {
+		scene_list = glGenLists(1);
+		glNewList(scene_list, GL_COMPILE);
 
-            // now begin at the root node of the imported data and traverse
-            // the scenegraph by multiplying subsequent local transforms
-            // together on GL's matrix stack.
-		//COMMENTATO recursive_render(scene, scene->mRootNode, 1.0);
+		// now begin at the root node of the imported data and traverse
+		// the scenegraph by multiplying subsequent local transforms
+		// together on GL's matrix stack.
+	//COMMENTATO recursive_render(scene, scene->mRootNode, 1.0);
 
-	    glEndList();
+		glEndList();
 	}
-	
+
 	//CODICE NOSTRO
 
-	//se gioco iniziato
-	else if (gameManager.state == play) {
-		GameObj cube1 = GameObj(5.f, 10.f, 60.f, 2.f, 2.f);
-		gameManager.drawObj(cube1);
-		/*glPushMatrix();
-			glTranslatef(5.f, 0.f, 10.f-pos_z);
-			glRotatef(60.f, 0.f, 1.0f, 0.f);
-			glutSolidCube(1);
-		glPopMatrix();*/
-
-		GameObj cube2 = GameObj(-7.f, 8.f, 45.f, 3.f, 3.f);
-		gameManager.drawObj(cube2); //passo player_z per movimento ambiente all'indietro
-		/*glPushMatrix();
-			glTranslatef(-7.f, 0.f, 8.f-pos_z);
-			glRotatef(45.f, 0.f, 1.0f, 0.f);
-			glutSolidCube(1);
-		glPopMatrix();*/
-
-		gameManager.drawPlayer(); //player è sempre disegnato in z=0;
-		/*glPushMatrix();
-			//fprintf(stdout, "ReDisplay - traslo di: %f x , %f z\n", pos_x, pos_z);
-			glTranslatef(pos_x, 0.f, 0.f);
-			//glTranslatef(0.f, 0.f, -8.f); //traslazione per la camera
-			glRotatef(180.f, 0.f, 1.0f, 0.f);
-			glutSolidSphere(0.5,12,12);
-			//recursive_render(scene, scene->mRootNode, 1.0);
-		glPopMatrix();*/
-
-		if (cube1.isColliding(gameManager.player.x, gameManager.player.z)) {
-			fprintf(stdout, "Collisione con CUBE1\n");
-			gameManager.state = paused;
-		}
-		if (cube2.isColliding(gameManager.player.x, gameManager.player.z)) {
-			fprintf(stdout, "Collisione con CUBE2\n");
-			gameManager.state = paused;
-		}
-	}
-	//se gioco non iniziato
-	else {
-		glPushMatrix();
-		glTranslatef(5.f, 0.f, 10.f);
-		glRotatef(60.f, 0.f, 1.0f, 0.f);
-		glutSolidCube(1);
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslatef(-7.f, 0.f, 8.f);
-		glRotatef(45.f, 0.f, 1.0f, 0.f);
-		glutSolidCube(1);
-		glPopMatrix();
-
-		glPushMatrix();
-		glTranslatef(0.f, 0.f, 0.f);
-		//glTranslatef(0.f, 0.f, -8.f);
-		glRotatef(180.f, 0.f, 1.0f, 0.f);
-		glutSolidSphere(0.5, 12, 12);
-		//recursive_render(scene, scene->mRootNode, 1.0);
-		glPopMatrix();
-	}
+	else gameManager.every_frame(); //definizione in GameManager
+	
 	//FINE CODICE NOSTRO
 
 	glCallList(scene_list);
@@ -605,7 +551,6 @@ void keyboard(unsigned char key, int x, int y) {
 void idle() {
 	int time = glutGet(GLUT_ELAPSED_TIME);
 	gameManager.my_idle(time);
-	glutPostRedisplay();
 	return;
 }
 
