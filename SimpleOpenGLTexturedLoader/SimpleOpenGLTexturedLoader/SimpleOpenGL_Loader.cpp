@@ -11,7 +11,8 @@
 // ----------------------------------------------------------------------------
 
 //NOSTRE LIBRERIE
-//#include "state.h"
+#include<stdlib.h>
+#include "lib.h"
 
 //FINE NOSTRE LIBRERIE
 
@@ -329,6 +330,20 @@ void do_motion (void)
 }
 
 // ----------------------------------------------------------------------------
+
+bool isColliding(float player_x, float player_z, float x, float z, float edge) {
+	float x_min = x - edge / 2;
+	float x_max = x + edge / 2;
+
+	float z_min = z - edge / 2;
+	float z_max = z + edge / 2;
+
+	if (x_min < player_x && player_x < x_max && z_min < player_z && player_z < z_max) { //controllo che il player sia dentro al BBox
+		return true;
+	}
+	else return false;
+}
+
 void display(void)
 {
 	float tmp;
@@ -342,7 +357,7 @@ void display(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	//gluLookAt(0.f,7.f,5.f,0.f,0.f,0.f,0.f,1.f,0.f);
-	gluLookAt(0.f, 3.f, 5.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
+	gluLookAt(0.f, 3.f, 10.f, 0.f, 0.f, 5.f, 0.f, 1.f, 0.f);
 	
 	// rotate it around the y axis
 	//COMMENTATO glRotatef(angle,0.f,1.f,0.f);
@@ -382,13 +397,17 @@ void display(void)
 	    glEndList();
 	}
 		//CODICE NOSTRO
-	else {
+
+	//se gioco iniziato
+	else if (isStarted) {
+		GameObj cube1 = GameObj(5.f, 10.f, 0.f, 2.f, 2.f);
 		glPushMatrix();
-			glTranslatef(5.f, 0.f, 5.f-pos_z);
+			glTranslatef(5.f, 0.f, 10.f-pos_z);
 			glRotatef(60.f, 0.f, 1.0f, 0.f);
 			glutSolidCube(1);
 		glPopMatrix();
 
+		GameObj cube2 = GameObj(-7.f, 8.f, 0.f, 3.f, 3.f);
 		glPushMatrix();
 			glTranslatef(-7.f, 0.f, 8.f-pos_z);
 			glRotatef(45.f, 0.f, 1.0f, 0.f);
@@ -396,11 +415,43 @@ void display(void)
 		glPopMatrix();
 
 		glPushMatrix();
-			fprintf(stdout, "ReDisplay - traslo di: %f x , %f z\n", pos_x, pos_z);
-			glTranslatef(pos_x, 0.f, 0.f); //moltiplico per un fattore perchè altrimenti triciclo è troppo lento rispettoa camera
-			glTranslatef(0.f, 0.f, -8.f);
+			//fprintf(stdout, "ReDisplay - traslo di: %f x , %f z\n", pos_x, pos_z);
+			glTranslatef(pos_x, 0.f, 0.f);
+			//glTranslatef(0.f, 0.f, -8.f); //traslazione per la camera
 			glRotatef(180.f, 0.f, 1.0f, 0.f);
-			recursive_render(scene, scene->mRootNode, 1.0);
+			glutSolidSphere(0.5,12,12);
+			//recursive_render(scene, scene->mRootNode, 1.0);
+		glPopMatrix();
+
+		if (cube1.isColliding(pos_x, pos_z)) {
+			fprintf(stdout, "Collisione con CUBE1\n");
+			reset(&isStarted,&pos_x,&pos_z);
+		}
+		if (cube2.isColliding(pos_x, pos_z)) {
+			fprintf(stdout, "Collisione con CUBE2\n");
+			exit(0);
+		}
+	}
+	//se gioco non iniziato
+	else {
+		glPushMatrix();
+		glTranslatef(5.f, 0.f, 10.f);
+		glRotatef(60.f, 0.f, 1.0f, 0.f);
+		glutSolidCube(1);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(-7.f, 0.f, 8.f);
+		glRotatef(45.f, 0.f, 1.0f, 0.f);
+		glutSolidCube(1);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0.f, 0.f, 0.f);
+		//glTranslatef(0.f, 0.f, -8.f);
+		glRotatef(180.f, 0.f, 1.0f, 0.f);
+		glutSolidSphere(0.5, 12, 12);
+		//recursive_render(scene, scene->mRootNode, 1.0);
 		glPopMatrix();
 	}
 		//FINE CODICE NOSTRO
@@ -588,6 +639,11 @@ void keyboard(unsigned char key, int x, int y) {
 		isStarted = true;
 		fprintf(stdout, "isStarted = %d\n",isStarted);
 		break;
+	//reset
+	case 'r':
+		pos_x = pos_z = 0;
+		isStarted = false;
+		break;
 	}
 
 	glutPostRedisplay();
@@ -601,6 +657,7 @@ void idle() {
 	glutPostRedisplay();
 	return;
 }
+
 //FINE CODICE NOSTRO
 
 int main(int argc, char **argv)

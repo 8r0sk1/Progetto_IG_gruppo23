@@ -90,8 +90,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObj.cpp" />
     <ClCompile Include="lib.cpp" />
     <ClCompile Include="SimpleOpenGL_Loader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameObj.h" />
+    <ClInclude Include="lib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,29 +1,8 @@
-class Vector3 {
-	float x, y, z;
+#include "lib.h"
 
-	Vector3() {
-		x = y = z = 0;
-	}
+void reset(bool* isStarted,float* x, float* z) {
+	*isStarted = false;
+	*x = 0.f;
+	*z = 0.f;
+}
 
-	Vector3(float x, float y, float z) {
-		x = x;
-		y = y;
-		z = z;
-	}
-
-};
-
-class Obj {
-	Vector3 position;
-	Vector3 rotation;
-	
-	Obj(Vector3 position, Vector3 rotation) {
-		position = position;
-		rotation = rotation;
-	}
-
-	Obj(Vector3 position) {
-		position = position;
-		rotation = Vector3();
-	}
-};
