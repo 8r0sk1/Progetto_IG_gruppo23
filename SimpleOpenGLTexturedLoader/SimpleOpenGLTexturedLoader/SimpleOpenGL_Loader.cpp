@@ -605,6 +605,7 @@ int main(int argc, char **argv)
 	glutIdleFunc(idle);
 
 	gameManager = GameManager(); //inizializzo il GameManager
+
 	//FINE CODICE NOSTRO
 
 

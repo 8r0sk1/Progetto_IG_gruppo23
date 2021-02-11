@@ -1,5 +1,6 @@
 #pragma once
 #include "lib.h"
+//#include <chrono>
 
 #define pi 3.14159265359
 
@@ -11,18 +12,32 @@ float angles = 22.5f; //attorno a y, per click (a-d)
 float speed = 0.003f; //del player
 
 //bumpyness obstacles
-float bumpyness = 10;
+float bumpyness = 4;
+
+//cronometro di gioco
+float chronometer;
 
 //variabile tempo
 int prev_time;
 
+//POSIZIONAMENTO OGGETTI (statica --> DA MODIFICARE)
+int const obj_dim = 3;
+GameObj obj[obj_dim];
+void setup() {
+	obj[0] = GameObj(5.f, 10.f, 60.f, 2.f, 2.f, bumpy_obstacle);
+	obj[1] = GameObj(-7.f, 8.f, 45.f, 1.5f, 1.5f, deadly_obstacle);
+	obj[2] = GameObj(0.f, 15.f, 15.f, 1.5f, 1.5f, collectable);
+}
+
 GameManager::GameManager() {
 	state = paused;
 	player = GameObj(0.f, 0.f, 0.f, player_tag);
+
+	setup(); //vedi sopra
 }
 
 //funzione di RENDER OBJ
-void GameManager::drawObj(GameObj obj) {
+ void GameManager::drawObj(GameObj obj) {
 	if (obj.toRender) { //controllo se obj è da renderizzare
 		glPushMatrix();
 		//render per ostacoli diversi
@@ -91,6 +106,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		//reset
 		case 'r':
 			state = paused;
+			setup();
 			glutPostRedisplay();
 			break;
 		}
@@ -114,6 +130,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		case 32:
 		case 'r':
 			state = paused;
+			setup();
 			glutPostRedisplay();
 			break;
 		}
@@ -134,13 +151,6 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 //BEHAVIOR per ogni REDISPLAY
 void GameManager::every_frame() {
 
-	//POSIZIONAMENTO OGGETTI (statica --> DA MODIFICARE)
-	int const obj_dim = 3;
-	GameObj obj [obj_dim];
-	obj[0] = GameObj(5.f, 10.f, 60.f, 2.f, 2.f, bumpy_obstacle);
-	obj[1] = GameObj(-7.f, 8.f, 45.f, 1.5f, 1.5f, deadly_obstacle);
-	obj[2] = GameObj(0.f, 15.f, 15.f, 1.5f, 1.5f, collectable);
-
 	switch ((int)state) {
 	case play:
 		//RENDER DEGLI OGGETTI
@@ -152,7 +162,7 @@ void GameManager::every_frame() {
 
 		//COLLISION DETECTION
 		for (int i = 0; i < obj_dim; i++) {
-			if (obj[i].isColliding(player.x, player.z)) {
+			if (obj[i].isColliding(player.x, player.z) && obj[i].toRender) { //controllo che avvenga collisione e che oggetto sia renderizzato a schermo
 				fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i + 1), obj[i].tag);
 				
 				float xs, zs, radians;
@@ -169,7 +179,7 @@ void GameManager::every_frame() {
 					state = dead;
 					break;
 				case collectable:
-					//obj[i].toRender = false;
+					obj[i].toRender = false;
 					break;
 				}
 			}
