@@ -1,13 +1,15 @@
 #pragma once
 #include "lib.h"
 
+#define pi 3.14159265359
+
 state_type state;
 GameObj player = GameObj(0.f,0.f,0.f);
 std::list<GameObj> objList;
 
 //velocità di spostamento player
-float xs = 0.25f; //lungo x, per click (a-d)
-float zs = 0.003f; //lungo z, al secondo ???
+float angles = 22.5f; //attorno a y, per click (a-d)
+float speed = 0.003f; //del player
 
 //variabile tempo
 int prev_time;
@@ -31,19 +33,24 @@ void GameManager::drawObj(GameObj obj) {
 void GameManager::drawPlayer() {
 	glPushMatrix();
 		glTranslatef(player.x, 0.f, 0.f);
+		glRotatef(90.f, 1.f, 0.f, 0.f); //per sistemare rotazione
 		glRotatef(player.angle, 0.f, 1.0f, 0.f);
-		glutSolidSphere(0.5,12,12); //DA MODIFICARE IL TIPO DI OSTACOLO
+		glutSolidCone(0.5,1,12,12); //DA MODIFICARE IL TIPO DI OSTACOLO
 	glPopMatrix();
 	return;
 }
 
 //gestione dell'IDLE
 void GameManager::my_idle(int time) {
+	//PLAY
 	if (state == play) {
-		player.moveOf(0.f,(float)(time - prev_time) * zs); //muovo il player 
-		glutPostRedisplay();
+		float radians = player.angle * 2 * pi / 360;
+		float zs = speed * cos(radians) * (time - prev_time);
+		float xs = speed * sin(radians) * (time - prev_time);
+		player.moveOf(xs,zs); //muovo il player
 	}
 	prev_time = time;
+	glutPostRedisplay();
 }
 
 //gestione dell'input a seconda dello stato
@@ -56,14 +63,18 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 	case play:
 		switch (key) {
 		case 'a':
-			player.x -= xs;
-			fprintf(stdout, "pos_x = %f\n", player.x);
+			if (player.angle >= -angles) {
+				player.angle -= angles;
+				fprintf(stdout, "pos_x = %f\n", player.x);
+			}
 			break;
 		case 'd':
-			player.x += xs;
-			fprintf(stdout, "pos_x = %f\n", player.x);
+			if (player.angle <= angles) {
+				player.angle += angles;
+				fprintf(stdout, "pos_x = %f\n", player.x);
+			}
 			break;
-			//reset
+		//reset
 		case 'r':
 			state = paused;
 			glutPostRedisplay();
@@ -131,8 +142,6 @@ void GameManager::every_frame() {
 			fprintf(stdout, "Collisione con CUBE2\n");
 			state = dead;
 		}
-
-		glutPostRedisplay();
 		break;
 
 	case paused:
