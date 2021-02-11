@@ -3,40 +3,54 @@
 
 #define pi 3.14159265359
 
-state_type state;
-GameObj player = GameObj(0.f,0.f,0.f);
-std::list<GameObj> objList;
+state_type state = paused;
+GameObj player = GameObj(0.f,0.f,0.f,player_tag);
 
 //velocità di spostamento player
 float angles = 22.5f; //attorno a y, per click (a-d)
 float speed = 0.003f; //del player
+
+//bumpyness obstacles
+float bumpyness = 10;
 
 //variabile tempo
 int prev_time;
 
 GameManager::GameManager() {
 	state = paused;
-	GameObj player = GameObj(0.f, 0.f, 0.f);
+	player = GameObj(0.f, 0.f, 0.f, player_tag);
 }
 
 //funzione di RENDER OBJ
 void GameManager::drawObj(GameObj obj) {
-	glPushMatrix();
-		glTranslatef(obj.x, 0.f, obj.z - player.z);
-		glRotatef(obj.angle, 0.f, 1.0f, 0.f);
-		glutSolidCube(1); //DA MODIFICARE IL TIPO DI OSTACOLO
-	glPopMatrix();
-	return;
-}
+	if (obj.toRender) { //controllo se obj è da renderizzare
+		glPushMatrix();
+		//render per ostacoli diversi
+		switch (obj.tag) {
 
-//funzione di RENDER PLAYER
-void GameManager::drawPlayer() {
-	glPushMatrix();
-		glTranslatef(player.x, 0.f, 0.f);
-		glRotatef(90.f, 1.f, 0.f, 0.f); //per sistemare rotazione
-		glRotatef(player.angle, 0.f, 1.0f, 0.f);
-		glutSolidCone(0.5,1,12,12); //DA MODIFICARE IL TIPO DI OSTACOLO
-	glPopMatrix();
+		case deadly_obstacle:
+		case bumpy_obstacle:
+			glTranslatef(obj.x, 0.f, obj.z - player.z);
+			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+			glutSolidCube(obj.dim_x);
+			break;
+
+		case collectable:
+			glTranslatef(obj.x, 0.f, obj.z - player.z);
+			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+			glutSolidSphere(obj.dim_x, 10, 10);
+			break;
+
+		case player_tag:
+			glTranslatef(obj.x, 0.f, 0.f);
+			glRotatef(90.f, 1.f, 0.f, 0.f); //per sistemare rotazione
+			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+			glutSolidCone(0.5, 1, 12, 12); //DA MODIFICARE IL TIPO DI OSTACOLO
+			break;
+
+		}
+		glPopMatrix();
+	}
 	return;
 }
 
@@ -65,13 +79,13 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		case 'a':
 			if (player.angle >= -angles) {
 				player.angle -= angles;
-				fprintf(stdout, "pos_x = %f\n", player.x);
+				//fprintf(stdout, "pos_x = %f\n", player.x);
 			}
 			break;
 		case 'd':
 			if (player.angle <= angles) {
 				player.angle += angles;
-				fprintf(stdout, "pos_x = %f\n", player.x);
+				//fprintf(stdout, "pos_x = %f\n", player.x);
 			}
 			break;
 		//reset
@@ -121,40 +135,60 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 void GameManager::every_frame() {
 
 	//POSIZIONAMENTO OGGETTI (statica --> DA MODIFICARE)
-	GameObj cube1 = GameObj(5.f, 10.f, 60.f, 2.f, 2.f);
-	GameObj cube2 = GameObj(-7.f, 8.f, 45.f, 3.f, 3.f);
+	int const obj_dim = 3;
+	GameObj obj [obj_dim];
+	obj[0] = GameObj(5.f, 10.f, 60.f, 2.f, 2.f, bumpy_obstacle);
+	obj[1] = GameObj(-7.f, 8.f, 45.f, 1.5f, 1.5f, deadly_obstacle);
+	obj[2] = GameObj(0.f, 15.f, 15.f, 1.5f, 1.5f, collectable);
 
 	switch ((int)state) {
 	case play:
 		//RENDER DEGLI OGGETTI
-		drawObj(cube1);
-		drawObj(cube2); //passo player_z per movimento ambiente all'indietro
-		drawPlayer(); //player è sempre disegnato in z=0;
-
+		for (int i = 0; i < obj_dim; i++) {
+			drawObj(obj[i]);
+		}
+		drawObj(player);
 		//FINE RENDER
 
 		//COLLISION DETECTION
-		if (cube1.isColliding(player.x, player.z)) {
-			fprintf(stdout, "Collisione con CUBE1\n");
-			state = dead;
-		}
-		if (cube2.isColliding(player.x, player.z)) {
-			fprintf(stdout, "Collisione con CUBE2\n");
-			state = dead;
+		for (int i = 0; i < obj_dim; i++) {
+			if (obj[i].isColliding(player.x, player.z)) {
+				fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i + 1), obj[i].tag);
+				
+				float xs, zs, radians;
+				//BEHAVIOR di COLLISIONE con OBJ
+				switch (obj[i].tag) {
+				case bumpy_obstacle:
+					//SCIVERE ANIMAZIONEEEEEEEEEEEEE
+					radians = player.angle * 2 * pi / 360;
+					zs = cos(radians) * bumpyness;
+					xs = sin(radians) * bumpyness;
+					player.moveOf(-xs,-zs);
+					break;
+				case deadly_obstacle:
+					state = dead;
+					break;
+				case collectable:
+					//obj[i].toRender = false;
+					break;
+				}
+			}
 		}
 		break;
 
 	case paused:
-		player = GameObj(0.f, 0.f, 0.f);
-		drawObj(cube1);
-		drawObj(cube2);
-		drawPlayer();
+		player.reset();
+		for (int i = 0; i < obj_dim; i++) {
+			drawObj(obj[i]);
+		}
+		drawObj(player);
 		break;
 
 	case dead:
-		drawObj(cube1);
-		drawObj(cube2);
-		drawPlayer();
+		for (int i = 0; i < obj_dim; i++) {
+			drawObj(obj[i]);
+		}
+		drawObj(player);
 		break;
 	}
 }
