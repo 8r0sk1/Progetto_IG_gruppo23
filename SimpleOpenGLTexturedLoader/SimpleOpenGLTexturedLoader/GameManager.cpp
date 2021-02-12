@@ -62,8 +62,9 @@ GameManager::GameManager() {
 
 		case player_tag:
 			glTranslatef(obj.x, 0.f, 0.f);
-			//glRotatef(90.f, 1.f, 0.f, 0.f); //per sistemare rotazione
-			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+			glRotatef(180.f, 0.f, 1.f, 0.f); //per sistemare rotazione
+			glRotatef(180.f, 1.f, 0.f, 0.f); //per sistemare rotazione
+			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
 			RenderModelByIndex(0);
 			//glutSolidCone(0.5, 1, 12, 12); //DA MODIFICARE IL TIPO DI OSTACOLO
 			break;

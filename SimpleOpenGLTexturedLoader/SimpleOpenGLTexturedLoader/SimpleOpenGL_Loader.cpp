@@ -33,7 +33,7 @@ void display(void)
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(-5.0f, 5.0f, -5.0f,
-			5.0f, 1.0f, 100.0f); //SETUP PROIEZIONE
+			5.0f, 0.0f, 100.0f); //SETUP PROIEZIONE
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
