@@ -11,6 +11,7 @@ GameObj floor_carpet = GameObj(0.f, 0.f, floor_base);
 //velocità di spostamento player
 float angles = 22.5f; //attorno a y, per click (a-d)
 float speed = 0.003f; //del player
+float steering_speedFactor = 0.5f;
 
 //bumpyness obstacles
 float bumpyness = 4;
@@ -25,9 +26,9 @@ int prev_time;
 int const obj_dim = 3;
 GameObj obj[obj_dim];
 void setup() {
-	obj[0] = GameObj(5.f, 10.f, 60.f, 2.f, 2.f, bumpy_obstacle);
-	obj[1] = GameObj(-7.f, 8.f, 45.f, 1.5f, 1.5f, deadly_obstacle);
-	obj[2] = GameObj(0.f, 15.f, 15.f, 1.5f, 1.5f, collectable);
+	obj[0] = GameObj(2.f, 10.f, 0.f, 2.f, 2.f, bumpy_obstacle);
+	obj[1] = GameObj(-1.f, 8.f, 0.f, 1.5f, 1.5f, deadly_obstacle);
+	obj[2] = GameObj(0.f, 15.f, 0.f, 1.5f, 1.5f, collectable);
 }
 
 GameManager::GameManager() {
@@ -46,6 +47,11 @@ GameManager::GameManager() {
 		switch (obj.tag) {
 
 		case deadly_obstacle:
+			glTranslatef(obj.x, 0.f, obj.z - player.z);
+			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+			RenderModelByIndex(4);
+			break;
+
 		case bumpy_obstacle:
 			glTranslatef(obj.x, 0.f, obj.z - player.z);
 			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
@@ -86,7 +92,7 @@ void GameManager::my_idle(int time) {
 	if (state == play) {
 		float radians = player.angle * 2 * pi / 360;
 		float zs = speed * cos(radians) * (time - prev_time);
-		float xs = speed * sin(radians) * (time - prev_time);
+		float xs = speed * sin(radians) * (time - prev_time) * steering_speedFactor;
 		player.moveOf(xs,zs); //muovo il player
 	}
 	prev_time = time;

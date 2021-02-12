@@ -34,11 +34,12 @@ void display(void)
 		glLoadIdentity();
 		glOrtho(-5.0f, 5.0f, -5.0f,
 			5.0f, 0.0f, 100.0f); //SETUP PROIEZIONE
+		//gluPerspective(90.f, 1.f, 0.f, 100.f);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		//gluLookAt(0.f,7.f,5.f,0.f,0.f,0.f,0.f,1.f,0.f);
-		gluLookAt(0.f, 3.f, 10.f,
+		gluLookAt(0.f, 1.f, 5.f,
 			0.f, 0.f, 1.f,
 			0.f, 1.f, 0.f); //SETUP CAMERA
 	}
