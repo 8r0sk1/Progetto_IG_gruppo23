@@ -95,10 +95,12 @@
     <ClCompile Include="lib.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="SimpleOpenGL_Loader.cpp" />
+    <ClCompile Include="LoadGameObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObj.h" />
+    <ClInclude Include="LoadObj.h" />
     <ClInclude Include="lib.h" />
     <ClInclude Include="Obstacle.h" />
   </ItemGroup>

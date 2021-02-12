@@ -6,6 +6,7 @@
 
 state_type state = paused;
 GameObj player = GameObj(0.f,0.f,0.f,player_tag);
+GameObj floor_carpet = GameObj(0.f, 0.f, floor_base);
 
 //velocità di spostamento player
 float angles = 22.5f; //attorno a y, per click (a-d)
@@ -32,6 +33,7 @@ void setup() {
 GameManager::GameManager() {
 	state = paused;
 	player = GameObj(0.f, 0.f, 0.f, player_tag);
+	floor_carpet = GameObj(0.f, 0.f, floor_base);
 
 	setup(); //vedi sopra
 }
@@ -47,20 +49,28 @@ GameManager::GameManager() {
 		case bumpy_obstacle:
 			glTranslatef(obj.x, 0.f, obj.z - player.z);
 			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
-			glutSolidCube(obj.dim_x);
+			RenderModelByIndex(2);
+			//glutSolidCube(obj.dim_x);
 			break;
 
 		case collectable:
 			glTranslatef(obj.x, 0.f, obj.z - player.z);
 			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
-			glutSolidSphere(obj.dim_x, 10, 10);
+			RenderModelByIndex(3);
+			//glutSolidSphere(obj.dim_x, 10, 10);
 			break;
 
 		case player_tag:
 			glTranslatef(obj.x, 0.f, 0.f);
-			glRotatef(90.f, 1.f, 0.f, 0.f); //per sistemare rotazione
+			//glRotatef(90.f, 1.f, 0.f, 0.f); //per sistemare rotazione
 			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
-			glutSolidCone(0.5, 1, 12, 12); //DA MODIFICARE IL TIPO DI OSTACOLO
+			RenderModelByIndex(0);
+			//glutSolidCone(0.5, 1, 12, 12); //DA MODIFICARE IL TIPO DI OSTACOLO
+			break;
+
+		case floor_base:
+			glTranslatef(obj.x, 0.f, 0.f - player.z);
+			RenderModelByIndex(1);
 			break;
 
 		}
@@ -153,6 +163,7 @@ void GameManager::every_frame() {
 
 	switch ((int)state) {
 	case play:
+		drawObj(floor_carpet);
 		//RENDER DEGLI OGGETTI
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
@@ -188,6 +199,7 @@ void GameManager::every_frame() {
 
 	case paused:
 		player.reset();
+		drawObj(floor_carpet);
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
 		}
@@ -195,6 +207,7 @@ void GameManager::every_frame() {
 		break;
 
 	case dead:
+		drawObj(floor_carpet);
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
 		}
