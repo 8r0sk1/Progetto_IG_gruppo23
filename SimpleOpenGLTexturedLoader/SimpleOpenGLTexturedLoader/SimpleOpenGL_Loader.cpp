@@ -32,16 +32,14 @@ void display(void)
 	if (gameManager.state == play || gameManager.state == paused || gameManager.state == dead) {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(-5.0f, 5.0f, -5.0f,
-			5.0f, 0.0f, 100.0f); //SETUP PROIEZIONE
-		//gluPerspective(90.f, 1.f, 0.f, 100.f);
+		//aspect ratio 1.5 tra bordi orizzontali e verticali (900x600)
+		glOrtho(-5.f, 5.f, -3.3f, 3.3f, 0.f, 100.f); //SETUP PROIEZIONE
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		//gluLookAt(0.f,7.f,5.f,0.f,0.f,0.f,0.f,1.f,0.f);
-		gluLookAt(0.f, 1.f, 5.f,
-			0.f, 0.f, 1.f,
-			0.f, 1.f, 0.f); //SETUP CAMERA
+		gluLookAt(0.f, 5.f, 0.1f,
+			0.f, 0.f, 0.f,
+			0.f, 1.f, 0.f);
 	}
 
 	gameManager.every_frame(); //definizione in GameManager

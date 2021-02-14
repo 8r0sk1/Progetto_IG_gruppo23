@@ -1,29 +1,29 @@
-Info,  T5128: Load ..//_models//OpenGLModels.dae
-Info,  T5128: Found a matching importer for this file format
-Info,  T5128: Import root directory is '..//_models/'
-Warn,  T5128: Collada: No material specified for subgroup "" in geometry "Cube_086-mesh".
-Info,  T5128: Entering post processing pipeline
-Warn,  T5128: Found 88 degenerated primitives
-Warn,  T5128: Found 92 degenerated primitives
-Info,  T5128: Points: 0, Lines: 3, Triangles: 28, Polygons: 0 (Meshes, X = removed)
-Error, T5128: FindInvalidDataProcess fails on mesh normals: Found zero-length vector
-Error, T5128: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
+Info,  T3988: Load ..//_models//OpenGLModels.dae
+Info,  T3988: Found a matching importer for this file format
+Info,  T3988: Import root directory is '..//_models/'
+Warn,  T3988: Collada: No material specified for subgroup "" in geometry "Cube_086-mesh".
+Info,  T3988: Entering post processing pipeline
+Warn,  T3988: Found 88 degenerated primitives
+Warn,  T3988: Found 92 degenerated primitives
+Info,  T3988: Points: 0, Lines: 3, Triangles: 31, Polygons: 0 (Meshes, X = removed)
+Error, T3988: FindInvalidDataProcess fails on mesh normals: Found zero-length vector
+Error, T3988: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
 Skipping one or more lines with the same contents
-Info,  T5128: FindInvalidDataProcess finished. Found issues ...
-Info,  T5128: GenVertexNormalsProcess finished. Vertex normals have been calculated
-Error, T5128: Unable to compute tangents: UV0 and normals must be there 
+Info,  T3988: FindInvalidDataProcess finished. Found issues ...
+Info,  T3988: GenVertexNormalsProcess finished. Vertex normals have been calculated
+Error, T3988: Unable to compute tangents: UV0 and normals must be there 
 Skipping one or more lines with the same contents
-Info,  T5128: Tangents are undefined for line and point meshes
-Error, T5128: Unable to compute tangents: UV0 and normals must be there 
-Info,  T5128: Tangents are undefined for line and point meshes
-Error, T5128: Unable to compute tangents: UV0 and normals must be there 
-Info,  T5128: Tangents are undefined for line and point meshes
-Info,  T5128: JoinVerticesProcess finished | Verts in: 978116 out: 175277 | ~82.1%
-Info,  T5128: Removed 5694 weights. Input bones: 8. Output bones: 8
-Error, T5128: This algorithm works on triangle meshes only
+Info,  T3988: Tangents are undefined for line and point meshes
+Error, T3988: Unable to compute tangents: UV0 and normals must be there 
+Info,  T3988: Tangents are undefined for line and point meshes
+Error, T3988: Unable to compute tangents: UV0 and normals must be there 
+Info,  T3988: Tangents are undefined for line and point meshes
+Info,  T3988: JoinVerticesProcess finished | Verts in: 978146 out: 175292 | ~82.1%
+Info,  T3988: Removed 5694 weights. Input bones: 8. Output bones: 8
+Error, T3988: This algorithm works on triangle meshes only
 Skipping one or more lines with the same contents
-Warn,  T5128: Mesh 20: Not suitable for vcache optimization
-Warn,  T5128: Mesh 21: Not suitable for vcache optimization
-Error, T5128: This algorithm works on triangle meshes only
-Info,  T5128: Cache relevant are 26 meshes (325802 faces). Average output ACMR is 0.758138
-Info,  T5128: Leaving post processing pipeline
+Warn,  T3988: Mesh 23: Not suitable for vcache optimization
+Warn,  T3988: Mesh 24: Not suitable for vcache optimization
+Error, T3988: This algorithm works on triangle meshes only
+Info,  T3988: Cache relevant are 29 meshes (325812 faces). Average output ACMR is 0.758164
+Info,  T3988: Leaving post processing pipeline

@@ -1,6 +1,6 @@
 #pragma once
 
-enum type { player_tag, floor_base, stair, deadly_obstacle, bumpy_obstacle, collectable, button };
+enum type { player_tag, floor_tag, stair, deadly_obstacle, bumpy_obstacle, collectable, button };
 
 class GameObj
 {

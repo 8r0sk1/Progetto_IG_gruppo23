@@ -5,8 +5,11 @@
 #define pi 3.14159265359
 
 state_type state = paused;
-GameObj player = GameObj(0.f,0.f,0.f,player_tag);
-GameObj floor_carpet = GameObj(0.f, 0.f, floor_base);
+GameObj player;
+GameObj floor_carpet;
+
+int current_level = 1;
+int num_obj_level = 15;
 
 //velocità di spostamento player
 float angles = 22.5f; //attorno a y, per click (a-d)
@@ -22,62 +25,113 @@ float chronometer;
 //variabile tempo
 int prev_time;
 
+type type_obstacle() {
+	int random_obstacle = rand() % 5 + 2;
+	if (random_obstacle == 0) {
+		return bumpy_obstacle;
+	}
+	else if (random_obstacle == 1) {
+		return bumpy_obstacle;
+	}
+	else {
+		return bumpy_obstacle;
+	}
+}
+
 //POSIZIONAMENTO OGGETTI (statica --> DA MODIFICARE)
-int const obj_dim = 3;
-GameObj obj[obj_dim];
+int const obj_dim = 15;
+GameObj obj[30];
 void setup() {
-	obj[0] = GameObj(2.f, 10.f, 0.f, 2.f, 2.f, bumpy_obstacle);
-	obj[1] = GameObj(-1.f, 8.f, 0.f, 1.5f, 1.5f, deadly_obstacle);
-	obj[2] = GameObj(0.f, 15.f, 0.f, 1.5f, 1.5f, collectable);
+	obj[0] = GameObj(-1.f, -1.f, 0.f, collectable); //first level
+	obj[1] = GameObj(0.f, -2.f, 0.f, collectable);
+	obj[2] = GameObj(1.f, -1.f, 0.f, collectable);
+	obj[3] = GameObj(-1.f, -2.f, 0.f, deadly_obstacle);
+	obj[4] = GameObj(1.f, -2.f, 0.f, deadly_obstacle);
+	obj[5] = GameObj(-1.f, -1.f, 0.f, stair);
+	obj[6] = GameObj(0.f, -2.f, 0.f, stair);
+	obj[7] = GameObj(1.f, -1.f, 0.f, bumpy_obstacle);
+	obj[8] = GameObj(-1.f, -2.f, 0.f, bumpy_obstacle);
+	obj[9] = GameObj(1.f, -2.f, 0.f, bumpy_obstacle);
+	obj[10] = GameObj(-1.f, -1.f, 0.f, bumpy_obstacle);
+	obj[11] = GameObj(0.f, -2.f, 0.f, bumpy_obstacle);
+	obj[12] = GameObj(1.f, -1.f, 0.f, bumpy_obstacle);
+	obj[13] = GameObj(-1.f, -2.f, 0.f, bumpy_obstacle);
+	obj[14] = GameObj(1.f, -2.f, 0.f, bumpy_obstacle);
+	obj[15] = GameObj(-1.f, -1.f, 0.f, collectable); //second level
+	obj[16] = GameObj(0.f, -2.f, 0.f, deadly_obstacle);
+	obj[17] = GameObj(1.f, -1.f, 0.f, stair);
+	obj[18] = GameObj(-1.f, -2.f, 0.f, stair);
+	obj[19] = GameObj(1.f, -2.f, 0.f, bumpy_obstacle);
+	obj[20] = GameObj(-1.f, -1.f, 0.f, bumpy_obstacle);
+	obj[21] = GameObj(0.f, -2.f, 0.f, bumpy_obstacle);
+	obj[22] = GameObj(1.f, -1.f, 0.f, collectable); //third level
+	obj[23] = GameObj(-1.f, -2.f, 0.f, deadly_obstacle);
+	obj[24] = GameObj(1.f, -2.f, 0.f, stair);
+	obj[25] = GameObj(-1.f, -1.f, 0.f, bumpy_obstacle);
+	obj[26] = GameObj(0.f, -2.f, 0.f, bumpy_obstacle);
+	obj[27] = GameObj(1.f, -1.f, 0.f, bumpy_obstacle);
+	obj[28] = GameObj(-1.f, -2.f, 0.f, bumpy_obstacle);
+	obj[29] = GameObj(1.f, -2.f, 0.f, bumpy_obstacle);
 }
 
 GameManager::GameManager() {
 	state = paused;
-	player = GameObj(0.f, 0.f, 0.f, player_tag);
-	floor_carpet = GameObj(0.f, 0.f, floor_base);
+	player = GameObj(0.f, 2.f, 0.f, player_tag);
+	floor_carpet = GameObj(0.f, -5.5f, floor_tag); //da -5.5 a 119 z
 
 	setup(); //vedi sopra
 }
 
+/*
+0 -> Tricilo
+1 -> Floor
+2 -> Sofa
+3 -> Chair
+4 -> Bin
+5 -> Ball
+6 -> Stairs
+7 -> Doll
+*/
+
 //funzione di RENDER OBJ
- void GameManager::drawObj(GameObj obj) {
+void GameManager::drawObj(GameObj obj) {
 	if (obj.toRender) { //controllo se obj è da renderizzare
 		glPushMatrix();
 		//render per ostacoli diversi
 		switch (obj.tag) {
 
+		case player_tag:
+			glTranslatef(obj.x, 0.f, 1.5f);
+			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
+			RenderModelByIndex(0);
+			break;
+
+		case floor_tag:
+			glTranslatef(obj.x, 0.f, obj.z + player.z);
+			RenderModelByIndex(1);
+			break;
+
+		case stair:
+			glTranslatef(obj.x, 0.f, obj.z + player.z);
+			RenderModelByIndex(6);
+			break;
+
 		case deadly_obstacle:
-			glTranslatef(obj.x, 0.f, obj.z - player.z);
+			glTranslatef(obj.x, 0.f, obj.z + player.z);
 			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
-			RenderModelByIndex(4);
+			RenderModelByIndex(7);
 			break;
 
 		case bumpy_obstacle:
-			glTranslatef(obj.x, 0.f, obj.z - player.z);
+			glTranslatef(obj.x, 0.f, obj.z + player.z);
 			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
 			RenderModelByIndex(2);
-			//glutSolidCube(obj.dim_x);
 			break;
 
 		case collectable:
-			glTranslatef(obj.x, 0.f, obj.z - player.z);
+			glTranslatef(obj.x, 0.f, obj.z + player.z);
 			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
-			RenderModelByIndex(3);
-			//glutSolidSphere(obj.dim_x, 10, 10);
-			break;
-
-		case player_tag:
-			glTranslatef(obj.x, 0.f, 0.f);
-			glRotatef(180.f, 0.f, 1.f, 0.f); //per sistemare rotazione
-			glRotatef(180.f, 1.f, 0.f, 0.f); //per sistemare rotazione
-			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
-			RenderModelByIndex(0);
-			//glutSolidCone(0.5, 1, 12, 12); //DA MODIFICARE IL TIPO DI OSTACOLO
-			break;
-
-		case floor_base:
-			glTranslatef(obj.x, 0.f, 0.f - player.z);
-			RenderModelByIndex(1);
+			RenderModelByIndex(5);
 			break;
 
 		}
@@ -93,7 +147,7 @@ void GameManager::my_idle(int time) {
 		float radians = player.angle * 2 * pi / 360;
 		float zs = speed * cos(radians) * (time - prev_time);
 		float xs = speed * sin(radians) * (time - prev_time) * steering_speedFactor;
-		player.moveOf(xs,zs); //muovo il player
+		player.moveOf(xs, zs); //muovo il player
 	}
 	prev_time = time;
 	glutPostRedisplay();
@@ -120,7 +174,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 				//fprintf(stdout, "pos_x = %f\n", player.x);
 			}
 			break;
-		//reset
+			//reset
 		case 'r':
 			state = paused;
 			setup();
@@ -132,7 +186,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		//stato PAUSED
 	case paused:
 		switch (key) {
-		//spacebar
+			//spacebar
 		case 32:
 			state = play;
 			glutPostRedisplay();
@@ -143,7 +197,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		//stato DEAD
 	case dead:
 		switch (key) {
-		//spacebar
+			//spacebar
 		case 32:
 		case 'r':
 			state = paused;
@@ -170,19 +224,18 @@ void GameManager::every_frame() {
 
 	switch ((int)state) {
 	case play:
+		//FINE RENDER
+		drawObj(player);
 		drawObj(floor_carpet);
 		//RENDER DEGLI OGGETTI
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
 		}
-		drawObj(player);
-		//FINE RENDER
-
 		//COLLISION DETECTION
 		for (int i = 0; i < obj_dim; i++) {
 			if (obj[i].isColliding(player.x, player.z) && obj[i].toRender) { //controllo che avvenga collisione e che oggetto sia renderizzato a schermo
 				fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i + 1), obj[i].tag);
-				
+
 				float xs, zs, radians;
 				//BEHAVIOR di COLLISIONE con OBJ
 				switch (obj[i].tag) {
@@ -191,7 +244,7 @@ void GameManager::every_frame() {
 					radians = player.angle * 2 * pi / 360;
 					zs = cos(radians) * bumpyness;
 					xs = sin(radians) * bumpyness;
-					player.moveOf(-xs,-zs);
+					player.moveOf(-xs, -zs);
 					break;
 				case deadly_obstacle:
 					state = dead;
@@ -206,19 +259,21 @@ void GameManager::every_frame() {
 
 	case paused:
 		player.reset();
+		drawObj(player);
 		drawObj(floor_carpet);
+		//RENDER DEGLI OGGETTI
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
 		}
-		drawObj(player);
 		break;
 
 	case dead:
+		drawObj(player);
 		drawObj(floor_carpet);
+		//RENDER DEGLI OGGETTI
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
 		}
-		drawObj(player);
 		break;
 	}
 }
