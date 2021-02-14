@@ -17,8 +17,6 @@ void reshape(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(fieldOfView, aspectRatio,
-		1.0, 1000.0);  // Znear and Zfar 
 	glViewport(0, 0, width, height);
 }
 

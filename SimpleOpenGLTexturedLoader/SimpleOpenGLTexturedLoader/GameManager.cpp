@@ -39,39 +39,39 @@ type type_obstacle() {
 }
 
 //POSIZIONAMENTO OGGETTI (statica --> DA MODIFICARE)
-int const obj_dim = 15;
+int const obj_dim = 30;
 GameObj obj[30];
 void setup() {
-	obj[0] = GameObj(-1.f, -1.f, 0.f, collectable); //first level
-	obj[1] = GameObj(0.f, -2.f, 0.f, collectable);
-	obj[2] = GameObj(1.f, -1.f, 0.f, collectable);
-	obj[3] = GameObj(-1.f, -2.f, 0.f, deadly_obstacle);
-	obj[4] = GameObj(1.f, -2.f, 0.f, deadly_obstacle);
-	obj[5] = GameObj(-1.f, -1.f, 0.f, stair);
-	obj[6] = GameObj(0.f, -2.f, 0.f, stair);
-	obj[7] = GameObj(1.f, -1.f, 0.f, bumpy_obstacle);
-	obj[8] = GameObj(-1.f, -2.f, 0.f, bumpy_obstacle);
-	obj[9] = GameObj(1.f, -2.f, 0.f, bumpy_obstacle);
-	obj[10] = GameObj(-1.f, -1.f, 0.f, bumpy_obstacle);
-	obj[11] = GameObj(0.f, -2.f, 0.f, bumpy_obstacle);
-	obj[12] = GameObj(1.f, -1.f, 0.f, bumpy_obstacle);
-	obj[13] = GameObj(-1.f, -2.f, 0.f, bumpy_obstacle);
-	obj[14] = GameObj(1.f, -2.f, 0.f, bumpy_obstacle);
-	obj[15] = GameObj(-1.f, -1.f, 0.f, collectable); //second level
-	obj[16] = GameObj(0.f, -2.f, 0.f, deadly_obstacle);
-	obj[17] = GameObj(1.f, -1.f, 0.f, stair);
-	obj[18] = GameObj(-1.f, -2.f, 0.f, stair);
-	obj[19] = GameObj(1.f, -2.f, 0.f, bumpy_obstacle);
-	obj[20] = GameObj(-1.f, -1.f, 0.f, bumpy_obstacle);
-	obj[21] = GameObj(0.f, -2.f, 0.f, bumpy_obstacle);
-	obj[22] = GameObj(1.f, -1.f, 0.f, collectable); //third level
-	obj[23] = GameObj(-1.f, -2.f, 0.f, deadly_obstacle);
-	obj[24] = GameObj(1.f, -2.f, 0.f, stair);
-	obj[25] = GameObj(-1.f, -1.f, 0.f, bumpy_obstacle);
-	obj[26] = GameObj(0.f, -2.f, 0.f, bumpy_obstacle);
-	obj[27] = GameObj(1.f, -1.f, 0.f, bumpy_obstacle);
-	obj[28] = GameObj(-1.f, -2.f, 0.f, bumpy_obstacle);
-	obj[29] = GameObj(1.f, -2.f, 0.f, bumpy_obstacle);
+	obj[0] = GameObj(-1.f, -40.f, 0.f, collectable); //first level
+	obj[1] = GameObj(0.f, -84.f, 0.f, collectable);
+	obj[2] = GameObj(1.f, -100.f, 0.f, collectable);
+	obj[3] = GameObj(-1.f, -36.f, 0.f, deadly_obstacle);
+	obj[4] = GameObj(1.f, -96.f, 0.f, deadly_obstacle);
+	obj[5] = GameObj(-1.f, -4.f, 0.f, stair);
+	obj[6] = GameObj(0.f, -52.f, 0.f, stair);
+	obj[7] = GameObj(1.f, 0.f, 0.f, bumpy_obstacle);
+	obj[8] = GameObj(-1.f, -8.f, 0.f, bumpy_obstacle);
+	obj[9] = GameObj(1.f, -24.f, 0.f, bumpy_obstacle);
+	obj[10] = GameObj(-1.f, -32.f, 0.f, bumpy_obstacle);
+	obj[11] = GameObj(0.f, -56.f, 0.f, bumpy_obstacle);
+	obj[12] = GameObj(1.f, -72.f, 0.f, bumpy_obstacle);
+	obj[13] = GameObj(-1.f, -92.f, 0.f, bumpy_obstacle);
+	obj[14] = GameObj(1.f, -112.f, 0.f, bumpy_obstacle);
+	obj[15] = GameObj(-1.f, -12.f, 0.f, collectable); //second level
+	obj[16] = GameObj(0.f, -16.f, 0.f, deadly_obstacle);
+	obj[17] = GameObj(1.f, -28.f, 0.f, stair);
+	obj[18] = GameObj(-1.f, -108.f, 0.f, stair);
+	obj[19] = GameObj(1.f, -68.f, 0.f, bumpy_obstacle);
+	obj[20] = GameObj(-1.f, -48.f, 0.f, bumpy_obstacle);
+	obj[21] = GameObj(0.f, -120.f, 0.f, bumpy_obstacle);
+	obj[22] = GameObj(1.f, -60.f, 0.f, collectable); //third level
+	obj[23] = GameObj(-1.f, -116.f, 0.f, deadly_obstacle);
+	obj[24] = GameObj(1.f, -76.f, 0.f, stair);
+	obj[25] = GameObj(-1.f, -20.f, 0.f, bumpy_obstacle);
+	obj[26] = GameObj(0.f, -44.f, 0.f, bumpy_obstacle);
+	obj[27] = GameObj(1.f, -64.f, 0.f, bumpy_obstacle);
+	obj[28] = GameObj(-1.f, -80.f, 0.f, bumpy_obstacle);
+	obj[29] = GameObj(1.f, -104.f, 0.f, bumpy_obstacle);
 }
 
 GameManager::GameManager() {
@@ -95,46 +95,49 @@ GameManager::GameManager() {
 
 //funzione di RENDER OBJ
 void GameManager::drawObj(GameObj obj) {
-	if (obj.toRender) { //controllo se obj è da renderizzare
+	if (obj.toRender) { //obj.toRender
 		glPushMatrix();
 		//render per ostacoli diversi
-		switch (obj.tag) {
 
-		case player_tag:
+		if (obj.tag == player_tag) {
 			glTranslatef(obj.x, 0.f, 1.5f);
 			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
 			RenderModelByIndex(0);
-			break;
+		}
 
-		case floor_tag:
+		if (obj.tag == floor_tag) {
 			glTranslatef(obj.x, 0.f, obj.z + player.z);
 			RenderModelByIndex(1);
-			break;
-
-		case stair:
-			glTranslatef(obj.x, 0.f, obj.z + player.z);
-			RenderModelByIndex(6);
-			break;
-
-		case deadly_obstacle:
-			glTranslatef(obj.x, 0.f, obj.z + player.z);
-			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
-			RenderModelByIndex(7);
-			break;
-
-		case bumpy_obstacle:
-			glTranslatef(obj.x, 0.f, obj.z + player.z);
-			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
-			RenderModelByIndex(2);
-			break;
-
-		case collectable:
-			glTranslatef(obj.x, 0.f, obj.z + player.z);
-			glRotatef(obj.angle, 0.f, 1.0f, 0.f);
-			RenderModelByIndex(5);
-			break;
-
 		}
+
+		if (obj.z - 4 < -player.z && obj.z + 4 > -player.z) {
+			switch (obj.tag) {
+
+			case stair:
+				glTranslatef(obj.x, 0.f, obj.z + player.z);
+				RenderModelByIndex(6);
+				break;
+
+			case deadly_obstacle:
+				glTranslatef(obj.x, 0.f, obj.z + player.z);
+				glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+				RenderModelByIndex(7);
+				break;
+
+			case bumpy_obstacle:
+				glTranslatef(obj.x, 0.f, obj.z + player.z);
+				glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+				RenderModelByIndex(2);
+				break;
+
+			case collectable:
+				glTranslatef(obj.x, 0.f, obj.z + player.z);
+				glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+				RenderModelByIndex(5);
+				break;
+			}
+		}
+
 		glPopMatrix();
 	}
 	return;
