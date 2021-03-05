@@ -2,6 +2,9 @@
 #include "GameObj.h"
 #include <math.h>
 
+
+	float dim_def = 0.75;
+
 	float x, z; //posizione (x,z)
 	float angle; //angolo di rotazione attorno ad y
 	float dim_x, dim_z; //dimensioni dell'oggetto
@@ -13,8 +16,8 @@
 		x = 0;
 		z = 0;
 		angle = 0;
-		dim_x = 1.f;
-		dim_z = 1.f;
+		dim_x = dim_def;
+		dim_z = dim_def;
 		tag = bumpy_obstacle;
 		toRender = true;
 	};
@@ -23,8 +26,8 @@
 		x = pos_x;
 		z = pos_z;
 		angle = 0;
-		dim_x = 1.f;
-		dim_z = 1.f;
+		dim_x = dim_def;
+		dim_z = dim_def;
 		tag = obj_tag;
 		toRender = true;
 	}
@@ -33,8 +36,8 @@
 		x = pos_x;
 		z = pos_z;
 		angle = r_angle;
-		dim_x = 1.f;
-		dim_z = 1.f;
+		dim_x = dim_def;
+		dim_z = dim_def;
 		tag = obj_tag;
 		toRender = true;
 	}
@@ -50,7 +53,11 @@
 	}
 
 	void GameObj::reset() {
-		if(tag == player_tag) x = z = angle = 0.f;
+		if (tag == player_tag) {
+			x = 0;
+			z = 4.f; //decentro player rispetto alla camera
+			angle = 0;
+		}
 	};
 
 	bool GameObj::isColliding(float pos_x, float pos_z) { //controlla se un punto (x,z) si trova nell'area di collisione dell'oggetto

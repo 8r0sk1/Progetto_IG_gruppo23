@@ -20,7 +20,8 @@ float steering_speedFactor = 0.5f;
 float bumpyness = 1;
 
 //cronometro di gioco
-float chronometer;
+float chronometer = 0;
+float chronometer_start = 0;
 
 //variabile tempo
 int prev_time;
@@ -76,7 +77,10 @@ void setup() {
 
 GameManager::GameManager() {
 	state = paused;
-	player = GameObj(0.f, 2.f, 0.f, player_tag);
+
+	player = GameObj(0.f, 0.f, 0.f, player_tag);
+	player.reset(); //faccio reset = setup
+
 	floor_carpet = GameObj(0.f, -5.5f, floor_tag); //da -5.5 a 119 z
 
 	setup(); //vedi sopra
@@ -100,7 +104,7 @@ void GameManager::drawObj(GameObj obj) {
 		//render per ostacoli diversi
 
 		if (obj.tag == player_tag) {
-			glTranslatef(obj.x, 0.f, 1.5f);
+			glTranslatef(obj.x, 0.f, 0.f);
 			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
 			RenderModelByIndex(0);
 		}
@@ -150,6 +154,16 @@ void GameManager::my_idle(int time) {
 		player.moveOf(xs, zs); //muovo il player
 	}
 	prev_time = time;
+
+	if (state == paused) {
+		chronometer_start = time;
+	}
+	if (state == play) {
+		chronometer = time - chronometer_start;
+		//DEBUG
+		printf("Chronometer : %f\n", chronometer);
+	}
+
 	glutPostRedisplay();
 }
 
