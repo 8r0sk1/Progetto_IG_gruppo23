@@ -17,7 +17,7 @@ float speed = 0.003f; //del player
 float steering_speedFactor = 0.5f;
 
 //bumpyness obstacles
-float bumpyness = 1;
+float bumpyness = 2;
 
 //cronometro di gioco
 float chronometer = 0;
@@ -238,6 +238,7 @@ void GameManager::every_frame() {
 
 	switch ((int)state) {
 	case play:
+		//RENDER SCENA 3D
 		drawObj(player);
 		drawObj(floor_carpet);
 		//RENDER DEGLI OGGETTI
@@ -267,6 +268,10 @@ void GameManager::every_frame() {
 				}
 			}
 		}
+
+		//RENDER UI
+		renderUI();
+
 		break;
 
 	case paused:
@@ -277,6 +282,10 @@ void GameManager::every_frame() {
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
 		}
+
+		//RENDER UI
+		//renderUI();
+
 		break;
 
 	case dead:

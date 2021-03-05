@@ -6,3 +6,9 @@
 #include "Gl/glut.h"
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include <iostream>
+
+void output(int x, int y, std::string str);
+
+void renderUI(void);
