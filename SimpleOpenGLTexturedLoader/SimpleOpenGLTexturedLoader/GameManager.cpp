@@ -13,11 +13,20 @@ int num_obj_level = 15;
 
 //velocità di spostamento player
 float angles = 22.5f; //attorno a y, per click (a-d)
-float speed = 0.003f; //del player
+float speed = 0; //del player
+float maxSpeed = 0.003f;
+float deltaSpeed = 0.000025f;
 float steering_speedFactor = 0.5f;
 
+bool isJumping = false;
+float jump_time_start;
+float jump_time = 300; //jumping time in ms
+
+//boosts
+int boosts = 0;
+
 //bumpyness obstacles
-float bumpyness = 2;
+float bumpyness = 1;
 
 //cronometro di gioco
 float chronometer = 0;
@@ -43,6 +52,9 @@ type type_obstacle() {
 int const obj_dim = 30;
 GameObj obj[30];
 void setup() {
+	speed = 0; //resetto velocità player
+	boosts = 0; //resetto boost
+
 	obj[0] = GameObj(-1.f, -40.f, 0.f, collectable); //first level
 	obj[1] = GameObj(0.f, -84.f, 0.f, collectable);
 	obj[2] = GameObj(1.f, -100.f, 0.f, collectable);
@@ -152,16 +164,29 @@ void GameManager::my_idle(int time) {
 		float zs = -speed * (time - prev_time);
 		float xs = speed * sin(radians) * (time - prev_time) * steering_speedFactor;
 		player.moveOf(xs, zs); //muovo il player
+
+		if (speed < maxSpeed) {
+			speed = speed + deltaSpeed;
+		}
+
+		//conteggio tempo
+		chronometer = time - chronometer_start;
+		//DEBUG
+		float seconds = chronometer / 1000;
+		printf("Chronometer : %f seconds\n", seconds);
 	}
 	prev_time = time;
 
 	if (state == paused) {
 		chronometer_start = time;
 	}
-	if (state == play) {
-		chronometer = time - chronometer_start;
-		//DEBUG
-		printf("Chronometer : %f\n", chronometer);
+
+	//controllo isJumping
+	if (!isJumping) {
+		jump_time_start = time;
+	}
+	else if (time - jump_time_start > jump_time){
+		isJumping = false;
 	}
 
 	glutPostRedisplay();
@@ -186,6 +211,18 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 			if (player.angle <= angles) {
 				player.angle += angles;
 				//fprintf(stdout, "pos_x = %f\n", player.x);
+			}
+			break;
+		case 'w':
+			if (boosts > 0) {
+				boosts--;
+				speed = speed + deltaSpeed * 100;
+			}
+			break;
+		case 32:
+			if (!isJumping) {
+				isJumping = true;
+				//da aggiungere animazione salto
 			}
 			break;
 			//reset
@@ -250,19 +287,21 @@ void GameManager::every_frame() {
 			if (obj[i].isColliding(player.x, player.z) && obj[i].toRender) { //controllo che avvenga collisione e che oggetto sia renderizzato a schermo
 				fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i + 1), obj[i].tag);
 
-				float xs, zs, radians;
+				//float xs, zs, radians;
 				//BEHAVIOR di COLLISIONE con OBJ
 				switch (obj[i].tag) {
 				case bumpy_obstacle:
-					//SCIVERE ANIMAZIONEEEEEEEEEEEEE
-					radians = player.angle * 2 * pi / 360;
+					/*radians = player.angle * 2 * pi / 360;
 					zs = cos(radians) * bumpyness;
-					player.moveOf(0, zs);
+					xs = sin(radians) * bumpyness;
+					player.moveOf(xs, zs);*/
+					speed = -(maxSpeed+speed)/5 * bumpyness;
 					break;
 				case deadly_obstacle:
-					state = dead;
+					if(!isJumping) state = dead;
 					break;
 				case collectable:
+					boosts++;
 					obj[i].toRender = false;
 					break;
 				}

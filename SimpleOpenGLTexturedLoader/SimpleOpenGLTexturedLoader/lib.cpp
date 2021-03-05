@@ -26,15 +26,16 @@ void output(int x, int y, std::string str)
 	glPushMatrix();
 	glLoadIdentity();
 	glRasterPos2i(50, 50);  // move in 10 pixels from the left and bottom edges
+
 	int len = str.length();
 	for (int i = 0; i < len; i++) {
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, str[i]);
 	}
+
 	glPopMatrix();
 
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
 }
 
 void renderUI(void)
