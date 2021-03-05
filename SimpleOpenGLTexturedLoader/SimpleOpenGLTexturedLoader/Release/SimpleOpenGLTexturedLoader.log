@@ -1,12 +1,8 @@
 ﻿  GameManager.cpp
-  GameObj.cpp
-  LoadGameObj.cpp
-  Obstacle.cpp
-  SimpleOpenGL_Loader.cpp
-  lib.cpp
+D:\Documents\Polito\IG\Progetto_IG_gruppo23\SimpleOpenGLTexturedLoader\SimpleOpenGLTexturedLoader\GameManager.cpp(238,11): warning C4101: 'xs': unreferenced local variable
   Generating code
-  22 of 243 functions ( 9.1%) were compiled, the rest were copied from previous compilation.
+  7 of 243 functions ( 2.9%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   SimpleOpenGLTexturedLoader.vcxproj -> D:\Documents\Polito\IG\Progetto_IG_gruppo23\SimpleOpenGLTexturedLoader\Release\SimpleOpenGLTexturedLoader.exe

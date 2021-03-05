@@ -17,7 +17,7 @@ float speed = 0.003f; //del player
 float steering_speedFactor = 0.5f;
 
 //bumpyness obstacles
-float bumpyness = 4;
+float bumpyness = 1;
 
 //cronometro di gioco
 float chronometer;
@@ -47,7 +47,7 @@ void setup() {
 	obj[2] = GameObj(1.f, -100.f, 0.f, collectable);
 	obj[3] = GameObj(-1.f, -36.f, 0.f, deadly_obstacle);
 	obj[4] = GameObj(1.f, -96.f, 0.f, deadly_obstacle);
-	obj[5] = GameObj(-1.f, -4.f, 0.f, stair);
+	obj[5] = GameObj(0.f, -4.f, 0.f, stair);
 	obj[6] = GameObj(0.f, -52.f, 0.f, stair);
 	obj[7] = GameObj(1.f, 0.f, 0.f, bumpy_obstacle);
 	obj[8] = GameObj(-1.f, -8.f, 0.f, bumpy_obstacle);
@@ -59,14 +59,14 @@ void setup() {
 	obj[14] = GameObj(1.f, -112.f, 0.f, bumpy_obstacle);
 	obj[15] = GameObj(-1.f, -12.f, 0.f, collectable); //second level
 	obj[16] = GameObj(0.f, -16.f, 0.f, deadly_obstacle);
-	obj[17] = GameObj(1.f, -28.f, 0.f, stair);
-	obj[18] = GameObj(-1.f, -108.f, 0.f, stair);
+	obj[17] = GameObj(0.f, -28.f, 0.f, stair);
+	obj[18] = GameObj(0.f, -108.f, 0.f, stair);
 	obj[19] = GameObj(1.f, -68.f, 0.f, bumpy_obstacle);
 	obj[20] = GameObj(-1.f, -48.f, 0.f, bumpy_obstacle);
 	obj[21] = GameObj(0.f, -120.f, 0.f, bumpy_obstacle);
 	obj[22] = GameObj(1.f, -60.f, 0.f, collectable); //third level
 	obj[23] = GameObj(-1.f, -116.f, 0.f, deadly_obstacle);
-	obj[24] = GameObj(1.f, -76.f, 0.f, stair);
+	obj[24] = GameObj(0.f, -76.f, 0.f, stair);
 	obj[25] = GameObj(-1.f, -20.f, 0.f, bumpy_obstacle);
 	obj[26] = GameObj(0.f, -44.f, 0.f, bumpy_obstacle);
 	obj[27] = GameObj(1.f, -64.f, 0.f, bumpy_obstacle);
@@ -106,33 +106,30 @@ void GameManager::drawObj(GameObj obj) {
 		}
 
 		if (obj.tag == floor_tag) {
-			glTranslatef(obj.x, 0.f, obj.z + player.z);
+			glTranslatef(0.f, 0.f, obj.z - player.z);
 			RenderModelByIndex(1);
 		}
 
-		if (obj.z - 4 < -player.z && obj.z + 4 > -player.z) {
+		if (obj.z - 5 < player.z && obj.z + 5 > player.z) {
 			switch (obj.tag) {
 
 			case stair:
-				glTranslatef(obj.x, 0.f, obj.z + player.z);
+				glTranslatef(obj.x, 0.f, obj.z - player.z);
 				RenderModelByIndex(6);
 				break;
 
 			case deadly_obstacle:
-				glTranslatef(obj.x, 0.f, obj.z + player.z);
-				glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+				glTranslatef(obj.x, 0.f, obj.z - player.z);
 				RenderModelByIndex(7);
 				break;
 
 			case bumpy_obstacle:
-				glTranslatef(obj.x, 0.f, obj.z + player.z);
-				glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+				glTranslatef(obj.x, 0.f, obj.z - player.z);
 				RenderModelByIndex(2);
 				break;
 
 			case collectable:
-				glTranslatef(obj.x, 0.f, obj.z + player.z);
-				glRotatef(obj.angle, 0.f, 1.0f, 0.f);
+				glTranslatef(obj.x, 0.f, obj.z - player.z);
 				RenderModelByIndex(5);
 				break;
 			}
@@ -148,7 +145,7 @@ void GameManager::my_idle(int time) {
 	//PLAY
 	if (state == play) {
 		float radians = player.angle * 2 * pi / 360;
-		float zs = speed * cos(radians) * (time - prev_time);
+		float zs = -speed * (time - prev_time);
 		float xs = speed * sin(radians) * (time - prev_time) * steering_speedFactor;
 		player.moveOf(xs, zs); //muovo il player
 	}
@@ -227,7 +224,6 @@ void GameManager::every_frame() {
 
 	switch ((int)state) {
 	case play:
-		//FINE RENDER
 		drawObj(player);
 		drawObj(floor_carpet);
 		//RENDER DEGLI OGGETTI
@@ -246,8 +242,7 @@ void GameManager::every_frame() {
 					//SCIVERE ANIMAZIONEEEEEEEEEEEEE
 					radians = player.angle * 2 * pi / 360;
 					zs = cos(radians) * bumpyness;
-					xs = sin(radians) * bumpyness;
-					player.moveOf(-xs, -zs);
+					player.moveOf(0, zs);
 					break;
 				case deadly_obstacle:
 					state = dead;
