@@ -16,3 +16,4 @@ void renderUI(float, float, float);
 
 void renderPressToPlayText();
 void renderDeadText();
+void renderScoreText();

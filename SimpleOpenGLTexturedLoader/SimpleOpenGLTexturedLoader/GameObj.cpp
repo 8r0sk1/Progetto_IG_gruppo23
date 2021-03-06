@@ -55,7 +55,8 @@
 	void GameObj::reset() {
 		if (tag == player_tag) {
 			x = 0;
-			z = 0; //decentro player rispetto alla camera ???
+			//z = 4.f;
+			z = -100.f; //cheat
 			angle = 0;
 		}
 	};

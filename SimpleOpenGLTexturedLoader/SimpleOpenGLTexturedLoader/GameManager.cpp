@@ -19,7 +19,7 @@ float steering_speedFactor = 1.f;
 
 bool isJumping = false;
 float jump_time_start;
-float jump_time = 300; //jumping time in ms
+float jump_time = 400; //jumping time in ms
 
 //boosts
 int boosts = 0;
@@ -117,7 +117,9 @@ void GameManager::drawObj(GameObj obj) {
 
 		if (obj.tag == player_tag) {
 			glTranslatef(obj.x, 0.f, 0.f);
+			if (isJumping) glTranslatef(0.f, 1.f, 0.f);
 			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
+			if(state == dead) glRotatef(60.f, 0.f, 0.f, 1.f);
 			RenderModelByIndex(0);
 		}
 
@@ -126,7 +128,7 @@ void GameManager::drawObj(GameObj obj) {
 			RenderModelByIndex(1);
 		}
 
-		if (obj.z - 5 < player.z && obj.z + 5 > player.z) {
+		if (obj.z - 3 < player.z && obj.z + 7 > player.z) {
 			switch (obj.tag) {
 
 			case stair:
@@ -158,11 +160,15 @@ void GameManager::drawObj(GameObj obj) {
 
 //gestione dell'IDLE
 void GameManager::my_idle(int time) {
+	
+	float radians, xs, zs;
+
 	//PLAY
-	if (state == play) {
-		float radians = player.angle * 2 * pi / 360;
-		float zs = -speed * cos(radians) * (time - prev_time) * steering_speedFactor;
-		float xs = speed * sin(radians) * (time - prev_time) * steering_speedFactor;
+	switch((int)state) {
+	case play:
+		radians = player.angle * 2 * pi / 360;
+		zs = -speed * cos(radians) * (time - prev_time) * steering_speedFactor;
+		xs = speed * sin(radians) * (time - prev_time) * steering_speedFactor;
 		player.moveOf(xs, zs); //muovo il player
 
 		if (speed < maxSpeed) {
@@ -174,22 +180,30 @@ void GameManager::my_idle(int time) {
 		//DEBUG
 		//float seconds = chronometer / 1000;
 		//printf("Chronometer : %f seconds\n", seconds);
-	}
-	prev_time = time;
 
-	if (state == paused) {
+		//controllo isJumping
+		if (!isJumping) {
+			jump_time_start = time;
+		}
+		else if (time - jump_time_start > jump_time) {
+			isJumping = false;
+		}
+
+		//controllo fine game
+		if (player.z < -119) {
+			state = score;
+		}
+
+		glutPostRedisplay();
+		break;
+
+	//PAUSE
+	case paused:
 		chronometer_start = time;
+		break;
 	}
 
-	//controllo isJumping
-	if (!isJumping) {
-		jump_time_start = time;
-	}
-	else if (time - jump_time_start > jump_time){
-		isJumping = false;
-	}
-
-	glutPostRedisplay();
+	prev_time = time;
 }
 
 //gestione dell'input a seconda dello stato
@@ -265,7 +279,12 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 
 		//stato SCORE
 	case score:
-		//GESTIONE INPUT SCORE
+		switch (key) {
+		case 32:
+			state = paused;
+			setup(); //TO LEVEL 2
+			glutPostRedisplay();
+		}
 		break;
 	}
 }
@@ -304,6 +323,11 @@ void GameManager::every_frame() {
 					boosts++;
 					obj[i].toRender = false;
 					break;
+				case stair:
+					if (player.angle != 0) {
+						if (abs(player.angle) < 45) speed = maxSpeed / 10;
+						else state = dead;
+					}
 				}
 			}
 		}
@@ -341,6 +365,19 @@ void GameManager::every_frame() {
 		renderUI(speed / maxSpeed, chronometer / 1000, 0);
 
 		renderDeadText();
+
+		break;
+
+	case score:
+		drawObj(player);
+		drawObj(floor_carpet);
+		//RENDER DEGLI OGGETTI
+		for (int i = 0; i < obj_dim; i++) {
+			drawObj(obj[i]);
+		}
+
+		renderScoreText();
+		renderPressToPlayText();
 
 		break;
 	}

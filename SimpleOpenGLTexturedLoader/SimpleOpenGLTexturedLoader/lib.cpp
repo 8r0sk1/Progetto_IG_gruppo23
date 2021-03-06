@@ -54,10 +54,14 @@ void renderUI(float velocity_str, float time_str, float balls_str)
 
 void renderDeadText()
 {
-	output(0.f, 0.f, "You're dead");
-	output(0.f, -1.f, "Press R or SPACEBAR to restart");
+	output(-0.8f, 0.f, "You're dead");
+	output(-1.75f, -1.f, "Press R or SPACEBAR to restart");
 }
 
 void renderPressToPlayText() {
-	output(0.f, -1.f, "Press SPACEBAR to start");
+	output(-1.5f, -1.f, "Press SPACEBAR to start");
+}
+
+void renderScoreText() {
+	output(-1.5f, 0.f, "LEVEL 1 completed");
 }
