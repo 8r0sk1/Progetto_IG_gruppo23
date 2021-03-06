@@ -55,7 +55,7 @@
 	void GameObj::reset() {
 		if (tag == player_tag) {
 			x = 0;
-			z = 4.f; //decentro player rispetto alla camera
+			z = 0; //decentro player rispetto alla camera ???
 			angle = 0;
 		}
 	};

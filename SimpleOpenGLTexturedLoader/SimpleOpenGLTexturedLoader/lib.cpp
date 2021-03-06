@@ -1,7 +1,8 @@
 #include "lib.h"
 #include <sstream>
 
-void* font = GLUT_BITMAP_9_BY_15;
+void* font = GLUT_BITMAP_9_BY_15; //for bitmap
+//void* font = GLUT_STROKE_ROMAN; //for stroke
 
 template <typename T>
 std::string to_string(T value)
@@ -32,6 +33,7 @@ void output(int x, int y, std::string str)
 		for (int i = 0; i < len; i++) {
 			//glScalef(5.f, 5.f, 5.f); //NOT WORKING
 			glutBitmapCharacter(font, str[i]);
+			//glutStrokeCharacter(font, str[i]);
 		}
 	glPopMatrix();
 

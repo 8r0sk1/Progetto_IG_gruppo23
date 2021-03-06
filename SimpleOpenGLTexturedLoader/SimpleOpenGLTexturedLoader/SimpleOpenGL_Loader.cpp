@@ -32,8 +32,8 @@ void display(void)
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		gluLookAt(0.f, 5.f, 0.1f,
-			0.f, 0.f, 0.f,
+		gluLookAt(0.f, 5.f, 0.3f,
+			0.f, 0.f, -2.f,
 			0.f, 1.f, 0.f);
 	}
 
