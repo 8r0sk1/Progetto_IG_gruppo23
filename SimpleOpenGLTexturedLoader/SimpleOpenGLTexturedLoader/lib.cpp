@@ -1,6 +1,16 @@
 #include "lib.h"
+#include <sstream>
 
-void* font = GLUT_BITMAP_TIMES_ROMAN_24;
+void* font = GLUT_BITMAP_9_BY_15;
+
+template <typename T>
+std::string to_string(T value)
+{
+	std::ostringstream os;
+	os << value;
+	return os.str();
+}
+
 void output(int x, int y, std::string str)
 {
 	glMatrixMode(GL_PROJECTION);
@@ -20,6 +30,7 @@ void output(int x, int y, std::string str)
 		//glRasterPos3f(x, y, 5.f);
 		int len = str.length();
 		for (int i = 0; i < len; i++) {
+			//glScalef(5.f, 5.f, 5.f); //NOT WORKING
 			glutBitmapCharacter(font, str[i]);
 		}
 	glPopMatrix();
@@ -33,10 +44,18 @@ void output(int x, int y, std::string str)
 
 }
 
-void renderUI(void)
+void renderUI(float velocity_str, float time_str, float balls_str)
 {
-	std::string text_row_1 = "This is written in a GLUT bitmap font.";
-	std::string text_row_2 = "(positioned in pixels with upper - left origin).";
-	output(-5, -3.3f, text_row_1);
-	output(-5, 3.3f, text_row_2);
+	output(-4.8f, -0.5f, to_string(velocity_str)+" m/s");
+	output(-4.8f, 1.f, to_string(time_str)+" seconds");
+}
+
+void renderDeadText()
+{
+	output(0.f, 0.f, "You're dead");
+	output(0.f, -1.f, "Press R or SPACEBAR to restart");
+}
+
+void renderPressToPlayText() {
+	output(0.f, -1.f, "Press SPACEBAR to start");
 }

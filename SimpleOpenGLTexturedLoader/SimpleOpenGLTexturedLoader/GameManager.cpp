@@ -1,6 +1,5 @@
 #pragma once
 #include "lib.h"
-//#include <chrono>
 
 #define pi 3.14159265359
 
@@ -53,6 +52,7 @@ int const obj_dim = 30;
 GameObj obj[30];
 void setup() {
 	speed = 0; //resetto velocità player
+	chronometer = 0;
 	boosts = 0; //resetto boost
 
 	obj[0] = GameObj(-1.f, -40.f, 0.f, collectable); //first level
@@ -172,8 +172,8 @@ void GameManager::my_idle(int time) {
 		//conteggio tempo
 		chronometer = time - chronometer_start;
 		//DEBUG
-		float seconds = chronometer / 1000;
-		printf("Chronometer : %f seconds\n", seconds);
+		//float seconds = chronometer / 1000;
+		//printf("Chronometer : %f seconds\n", seconds);
 	}
 	prev_time = time;
 
@@ -308,6 +308,9 @@ void GameManager::every_frame() {
 			}
 		}
 
+		//UI render
+		renderUI(speed/maxSpeed, chronometer / 1000, 0);
+
 		break;
 
 	case paused:
@@ -319,6 +322,11 @@ void GameManager::every_frame() {
 			drawObj(obj[i]);
 		}
 
+		//UI render
+		renderUI(speed / maxSpeed, chronometer / 1000, 0);
+
+		renderPressToPlayText();
+
 		break;
 
 	case dead:
@@ -328,6 +336,12 @@ void GameManager::every_frame() {
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
 		}
+
+		//UI render
+		renderUI(speed / maxSpeed, chronometer / 1000, 0);
+
+		renderDeadText();
+
 		break;
 	}
 }

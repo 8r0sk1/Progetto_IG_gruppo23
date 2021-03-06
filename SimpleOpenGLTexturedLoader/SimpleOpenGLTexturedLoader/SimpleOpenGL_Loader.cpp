@@ -39,9 +39,6 @@ void display(void)
 
 	gameManager.every_frame(); //definizione in GameManager
 
-	//prova
-	renderUI();
-
 	glutSwapBuffers();
 }
 

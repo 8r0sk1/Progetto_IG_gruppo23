@@ -12,4 +12,7 @@
 
 void output(int x, int y, std::string str);
 
-void renderUI(void);
+void renderUI(float, float, float);
+
+void renderPressToPlayText();
+void renderDeadText();
