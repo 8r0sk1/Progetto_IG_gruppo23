@@ -4,9 +4,6 @@
 
 //FINE NOSTRE LIBRERIE
 
-#include "GL/glut.h"
-#include <IL/il.h>
-
 //VARIABILI NOSTRE
 GameManager gameManager;
 //FINE VARIABILI NOSTRE

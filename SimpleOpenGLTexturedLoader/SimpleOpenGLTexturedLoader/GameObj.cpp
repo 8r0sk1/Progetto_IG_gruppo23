@@ -3,7 +3,7 @@
 #include <math.h>
 
 
-	float dim_def = 0.75;
+	float dim_def = 1.f;
 
 	float x, z; //posizione (x,z)
 	float angle; //angolo di rotazione attorno ad y

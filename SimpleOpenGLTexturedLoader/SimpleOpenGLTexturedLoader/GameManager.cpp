@@ -16,7 +16,7 @@ float angles = 22.5f; //attorno a y, per click (a-d)
 float speed = 0; //del player
 float maxSpeed = 0.003f;
 float deltaSpeed = 0.000025f;
-float steering_speedFactor = 0.5f;
+float steering_speedFactor = 1.f;
 
 bool isJumping = false;
 float jump_time_start;
@@ -161,7 +161,7 @@ void GameManager::my_idle(int time) {
 	//PLAY
 	if (state == play) {
 		float radians = player.angle * 2 * pi / 360;
-		float zs = -speed * (time - prev_time);
+		float zs = -speed * cos(radians) * (time - prev_time) * steering_speedFactor;
 		float xs = speed * sin(radians) * (time - prev_time) * steering_speedFactor;
 		player.moveOf(xs, zs); //muovo il player
 
@@ -295,7 +295,7 @@ void GameManager::every_frame() {
 					zs = cos(radians) * bumpyness;
 					xs = sin(radians) * bumpyness;
 					player.moveOf(xs, zs);*/
-					speed = -(maxSpeed+speed)/5 * bumpyness;
+					if(0 < speed) speed = -(maxSpeed+speed)/5 * bumpyness;
 					break;
 				case deadly_obstacle:
 					if(!isJumping) state = dead;
@@ -308,9 +308,6 @@ void GameManager::every_frame() {
 			}
 		}
 
-		//RENDER UI
-		renderUI();
-
 		break;
 
 	case paused:
@@ -321,9 +318,6 @@ void GameManager::every_frame() {
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
 		}
-
-		//RENDER UI
-		//renderUI();
 
 		break;
 

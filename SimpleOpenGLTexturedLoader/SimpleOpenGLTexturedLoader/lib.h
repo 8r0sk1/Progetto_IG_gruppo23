@@ -4,6 +4,7 @@
 #include "LoadObj.h"
 #include <stdlib.h>
 #include "Gl/glut.h"
+#include <IL/il.h>
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
