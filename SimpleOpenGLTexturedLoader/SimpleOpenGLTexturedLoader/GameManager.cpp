@@ -7,6 +7,7 @@ state_type state = paused;
 GameObj player;
 GameObj floor_carpet;
 
+int z_finish_lvl1 = -125;
 int current_level = 1;
 int num_obj_level = 15;
 
@@ -19,7 +20,7 @@ float steering_speedFactor = 1.f;
 
 bool isJumping = false;
 float jump_time_start;
-float jump_time = 400; //jumping time in ms
+float jump_time = 500; //jumping time in ms
 
 //boosts
 int boosts = 0;
@@ -32,7 +33,8 @@ float chronometer = 0;
 float chronometer_start = 0;
 
 //variabile tempo
-int prev_time;
+int prev_time = 0;
+int fps;
 
 type type_obstacle() {
 	int random_obstacle = rand() % 5 + 2;
@@ -190,20 +192,25 @@ void GameManager::my_idle(int time) {
 		}
 
 		//controllo fine game
-		if (player.z < -119) {
+		if (player.z < z_finish_lvl1) {
 			state = score;
 		}
 
-		glutPostRedisplay();
 		break;
 
 	//PAUSE
 	case paused:
 		chronometer_start = time;
+
 		break;
 	}
 
+	//fps calculation
+	fps = fps_calc(time, prev_time);
+
 	prev_time = time;
+
+	glutPostRedisplay();
 }
 
 //gestione dell'input a seconda dello stato
@@ -334,6 +341,7 @@ void GameManager::every_frame() {
 
 		//UI render
 		renderUI(speed/maxSpeed, chronometer / 1000, 0);
+		renderFps(fps);
 
 		break;
 
@@ -348,7 +356,6 @@ void GameManager::every_frame() {
 
 		//UI render
 		renderUI(speed / maxSpeed, chronometer / 1000, 0);
-
 		renderPressToPlayText();
 
 		break;
@@ -363,7 +370,6 @@ void GameManager::every_frame() {
 
 		//UI render
 		renderUI(speed / maxSpeed, chronometer / 1000, 0);
-
 		renderDeadText();
 
 		break;
@@ -376,8 +382,8 @@ void GameManager::every_frame() {
 			drawObj(obj[i]);
 		}
 
+		renderUI(speed / maxSpeed, chronometer / 1000, 0);
 		renderScoreText();
-		renderPressToPlayText();
 
 		break;
 	}

@@ -12,8 +12,11 @@
 
 void output(int x, int y, std::string str);
 
+void renderFps(int);
 void renderUI(float, float, float);
 
 void renderPressToPlayText();
 void renderDeadText();
 void renderScoreText();
+
+int fps_calc(int, int);
