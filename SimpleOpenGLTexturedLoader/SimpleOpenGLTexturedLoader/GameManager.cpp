@@ -4,6 +4,7 @@
 #define pi 3.14159265359
 
 state_type state = paused;
+menu_state_type menu_state = empty;
 level_type level = lvl1;
 
 GameObj player;
@@ -55,10 +56,21 @@ type type_obstacle() {
 //POSIZIONAMENTO OGGETTI (statica --> DA MODIFICARE)
 int const obj_dim = 30;
 GameObj obj[30];
+Button bObj[4];
+
 void setup() {
 	speed = 0; //resetto velocità player
 	chronometer = 0;
 	boosts = 0; //resetto boost
+}
+
+GameManager::GameManager() {
+	state = paused;
+
+	player = GameObj(0.f, 0.f, 0.f, player_tag);
+	player.reset(); //faccio reset = setup
+
+	floor_carpet = GameObj(0.f, -5.5f, floor_tag); //da -5.5 a 119 z
 
 	obj[0] = GameObj(-1.f, -40.f, 0.f, collectable); //first level
 	obj[1] = GameObj(0.f, -84.f, 0.f, collectable);
@@ -90,15 +102,11 @@ void setup() {
 	obj[27] = GameObj(1.f, -64.f, 0.f, bumpy_obstacle);
 	obj[28] = GameObj(-1.f, -80.f, 0.f, bumpy_obstacle);
 	obj[29] = GameObj(1.f, -104.f, 0.f, bumpy_obstacle);
-}
 
-GameManager::GameManager() {
-	state = paused;
-
-	player = GameObj(0.f, 0.f, 0.f, player_tag);
-	player.reset(); //faccio reset = setup
-
-	floor_carpet = GameObj(0.f, -5.5f, floor_tag); //da -5.5 a 119 z
+	bObj[0] = Button(-4.5f,2.f,1.f,1.f,bPlay);
+	bObj[0] = Button(-4.5f, 1.f, 1.f, 1.f, bTutorial);
+	bObj[0] = Button(-4.5f, 0.f, 1.f, 1.f, bCredits);
+	bObj[0] = Button(-4.5f, -1.f, 1.f, 1.f, bExit);
 
 	setup(); //vedi sopra
 }
@@ -122,7 +130,10 @@ void GameManager::drawObj(GameObj obj) {
 
 		if (obj.tag == player_tag) {
 			glTranslatef(obj.x, 0.f, 0.f);
-			if (isJumping) glTranslatef(0.f, 1.f, 0.f);
+			if (isJumping) {
+				glTranslatef(0.f, 1.f, 0.f);
+				glRotatef(30.f, 1.f, 0, 0);
+			}
 			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
 			if(state == dead) glRotatef(60.f, 0.f, 0.f, 1.f);
 			RenderModelByIndex(0);
@@ -236,6 +247,9 @@ void GameManager::my_idle(int time) {
 		//CONTROLLO CHRONOMETER
 		chronometer = time - chronometer_start;
 
+		//fps calculation
+		fps = fps_calc(time, prev_time);
+
 		break;
 
 	//PAUSE
@@ -244,9 +258,6 @@ void GameManager::my_idle(int time) {
 
 		break;
 	}
-
-	//fps calculation
-	fps = fps_calc(time, prev_time);
 
 	prev_time = time;
 
@@ -321,7 +332,34 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 
 		//stato MENU
 	case menu:
-		//GESTIONE INPUT MENU
+		for (int i = 0; i < 3; i++) {
+			if(bObj[i].isColliding(x, y)){ //controllo posizione del mouse
+				//------ CONTROLLO COLORE SCRITTA ------
+				if (key == GLUT_LEFT_BUTTON) {
+
+					//---- DEACTIVATE MENU OBJECTS -----
+
+					//controllo quale bottone è clicked
+					switch (bObj[i].bType) {
+					case bPlay:
+						//---- DEACTIVATE MENU OBJECTS -----
+						state = paused;
+						break;
+					case bTutorial:
+						//---- ACTIVATE TUTORIAL IMAGE PLANE -----
+						menu_state = tutorial;
+						break;
+					case bCredits:
+						//---- ACTIVATE CREDITS IMAGE PLANE -----
+						menu_state = credits;
+						break;
+					case bExit:
+						exit(0); //exits from the game
+						break;
+					}
+				}
+			}
+		}
 		break;
 
 		//stato SCORE
@@ -340,6 +378,8 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 void GameManager::every_frame() {
 
 	switch ((int)state) {
+	
+	//PLAY
 	case play:
 		//RENDER SCENA 3D
 		drawObj(player);
@@ -354,7 +394,8 @@ void GameManager::every_frame() {
 		renderFps(fps);
 
 		break;
-
+	
+	//PAUSED
 	case paused:
 		player.reset();
 		drawObj(player);
@@ -369,7 +410,8 @@ void GameManager::every_frame() {
 		renderPressToPlayText();
 
 		break;
-
+	
+	//DEAD
 	case dead:
 		drawObj(player);
 		drawObj(floor_carpet);
@@ -383,7 +425,8 @@ void GameManager::every_frame() {
 		renderDeadText();
 
 		break;
-
+	
+	//SCORE
 	case score:
 		drawObj(player);
 		drawObj(floor_carpet);
@@ -394,6 +437,12 @@ void GameManager::every_frame() {
 
 		renderUI(speed / maxSpeed, chronometer / 1000, 0);
 		renderScoreText();
+
+		break;
+
+	//MENU
+	case menu:
+		//----- RENDER BUTTONS -----
 
 		break;
 	}

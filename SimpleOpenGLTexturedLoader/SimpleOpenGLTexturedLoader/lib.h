@@ -9,6 +9,7 @@
 #include <math.h>
 #include <string.h>
 #include <iostream>
+#include "Button.h"
 
 void output(int x, int y, std::string str);
 

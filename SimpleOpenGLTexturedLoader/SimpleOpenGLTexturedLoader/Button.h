@@ -1,0 +1,15 @@
+#pragma once
+
+#include "GameObj.h"
+
+enum button_type {bPlay,bCredits,bExit,bTutorial};
+
+class Button : public GameObj
+{
+public:
+	button_type bType;
+
+	Button();
+	Button(float x,float z,float dim_x,float dim_z,button_type);
+};
+

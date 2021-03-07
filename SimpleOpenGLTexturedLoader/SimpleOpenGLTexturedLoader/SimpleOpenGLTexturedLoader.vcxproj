@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObj.cpp" />
     <ClCompile Include="lib.cpp" />
@@ -98,6 +99,7 @@
     <ClCompile Include="LoadGameObj.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObj.h" />
     <ClInclude Include="LoadObj.h" />

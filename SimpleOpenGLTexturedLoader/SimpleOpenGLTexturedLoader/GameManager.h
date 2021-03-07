@@ -1,8 +1,9 @@
 #pragma once
 #include"GameObj.h"
 
-enum state_type { menu, play, score, paused, dead };
+enum state_type { menu, play, score, paused, dead};
 enum level_type { lvl1, lvl2 };
+enum menu_state_type {empty, tutorial, credits};
 
 class GameManager
 {
