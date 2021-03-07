@@ -1,8 +1,7 @@
-﻿  lib.cpp
+﻿  GameManager.cpp
   Generating code
-C:\Users\strobopc\Documents\Progetto_IG_23\SimpleOpenGLTexturedLoader\SimpleOpenGLTexturedLoader\lib.cpp(70): warning C4715: 'fps_calc': not all control paths return a value
-  4 of 296 functions ( 1.4%) were compiled, the rest were copied from previous compilation.
+  1 of 296 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   SimpleOpenGLTexturedLoader.vcxproj -> C:\Users\strobopc\Documents\Progetto_IG_23\SimpleOpenGLTexturedLoader\Release\SimpleOpenGLTexturedLoader.exe

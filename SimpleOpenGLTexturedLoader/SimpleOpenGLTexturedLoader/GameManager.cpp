@@ -4,17 +4,19 @@
 #define pi 3.14159265359
 
 state_type state = paused;
+level_type level = lvl1;
+
 GameObj player;
 GameObj floor_carpet;
 
 int z_finish_lvl1 = -125;
-int current_level = 1;
-int num_obj_level = 15;
+float x_border_abs = 2.1f;
 
 //velocità di spostamento player
 float angles = 22.5f; //attorno a y, per click (a-d)
 float speed = 0; //del player
 float maxSpeed = 0.003f;
+float minSpeed_factor = 3.f; //it is divided by maxSpeed
 float deltaSpeed = 0.000025f;
 float steering_speedFactor = 1.f;
 
@@ -36,6 +38,7 @@ float chronometer_start = 0;
 int prev_time = 0;
 int fps;
 
+//USED???
 type type_obstacle() {
 	int random_obstacle = rand() % 5 + 2;
 	if (random_obstacle == 0) {
@@ -79,7 +82,7 @@ void setup() {
 	obj[19] = GameObj(1.f, -68.f, 0.f, bumpy_obstacle);
 	obj[20] = GameObj(-1.f, -48.f, 0.f, bumpy_obstacle);
 	obj[21] = GameObj(0.f, -120.f, 0.f, bumpy_obstacle);
-	obj[22] = GameObj(1.f, -60.f, 0.f, collectable); //third level
+	obj[22] = GameObj(1.f, -60.f, 0.f, collectable);
 	obj[23] = GameObj(-1.f, -116.f, 0.f, deadly_obstacle);
 	obj[24] = GameObj(0.f, -76.f, 0.f, stair);
 	obj[25] = GameObj(-1.f, -20.f, 0.f, bumpy_obstacle);
@@ -168,22 +171,56 @@ void GameManager::my_idle(int time) {
 	//PLAY
 	switch((int)state) {
 	case play:
+		//PLAYER MOVEMENT
 		radians = player.angle * 2 * pi / 360;
 		zs = -speed * cos(radians) * (time - prev_time) * steering_speedFactor;
 		xs = speed * sin(radians) * (time - prev_time) * steering_speedFactor;
 		player.moveOf(xs, zs); //muovo il player
 
+		//SPEED CONTROL
 		if (speed < maxSpeed) {
 			speed = speed + deltaSpeed;
 		}
 
-		//conteggio tempo
-		chronometer = time - chronometer_start;
-		//DEBUG
-		//float seconds = chronometer / 1000;
-		//printf("Chronometer : %f seconds\n", seconds);
+		//COLLISION DETECTION
+		for (int i = 0; i < obj_dim; i++) {
+			if (obj[i].isColliding(player.x, player.z) && obj[i].toRender) { //controllo che avvenga collisione e che oggetto sia renderizzato a schermo
+				fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i + 1), obj[i].tag);
 
-		//controllo isJumping
+				//float xs, zs, radians;
+				//BEHAVIOR di COLLISIONE con OBJ
+				switch (obj[i].tag) {
+				case bumpy_obstacle:
+					/*radians = player.angle * 2 * pi / 360;
+					zs = cos(radians) * bumpyness;
+					xs = sin(radians) * bumpyness;
+					player.moveOf(xs, zs);*/
+					if (0 < speed) speed = -(maxSpeed + speed) / 5 * bumpyness;
+					break;
+				case deadly_obstacle:
+					if (!isJumping) state = dead;
+					break;
+				case collectable:
+					boosts++;
+					obj[i].toRender = false;
+					break;
+				case stair:
+					if (player.angle != 0) {
+						if (abs(player.angle) < 45) {
+							if (speed > maxSpeed / minSpeed_factor) speed = speed * (1 - deltaSpeed * 6000);
+							else speed = maxSpeed / minSpeed_factor;
+						}
+						else state = dead;
+					}
+				}
+			}
+		}
+
+		//CONTROLLO BORDER
+		if (!(abs(player.x) < x_border_abs))
+			state = dead;
+
+		//CONTROLLO JUMP
 		if (!isJumping) {
 			jump_time_start = time;
 		}
@@ -191,10 +228,13 @@ void GameManager::my_idle(int time) {
 			isJumping = false;
 		}
 
-		//controllo fine game
+		//CONTROLLO FINE LVL
 		if (player.z < z_finish_lvl1) {
 			state = score;
 		}
+
+		//CONTROLLO CHRONOMETER
+		chronometer = time - chronometer_start;
 
 		break;
 
@@ -307,36 +347,6 @@ void GameManager::every_frame() {
 		//RENDER DEGLI OGGETTI
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
-		}
-		//COLLISION DETECTION
-		for (int i = 0; i < obj_dim; i++) {
-			if (obj[i].isColliding(player.x, player.z) && obj[i].toRender) { //controllo che avvenga collisione e che oggetto sia renderizzato a schermo
-				fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i + 1), obj[i].tag);
-
-				//float xs, zs, radians;
-				//BEHAVIOR di COLLISIONE con OBJ
-				switch (obj[i].tag) {
-				case bumpy_obstacle:
-					/*radians = player.angle * 2 * pi / 360;
-					zs = cos(radians) * bumpyness;
-					xs = sin(radians) * bumpyness;
-					player.moveOf(xs, zs);*/
-					if(0 < speed) speed = -(maxSpeed+speed)/5 * bumpyness;
-					break;
-				case deadly_obstacle:
-					if(!isJumping) state = dead;
-					break;
-				case collectable:
-					boosts++;
-					obj[i].toRender = false;
-					break;
-				case stair:
-					if (player.angle != 0) {
-						if (abs(player.angle) < 45) speed = maxSpeed / 10;
-						else state = dead;
-					}
-				}
-			}
 		}
 
 		//UI render

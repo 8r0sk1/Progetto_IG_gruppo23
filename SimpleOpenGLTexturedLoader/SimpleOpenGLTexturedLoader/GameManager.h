@@ -2,6 +2,7 @@
 #include"GameObj.h"
 
 enum state_type { menu, play, score, paused, dead };
+enum level_type { lvl1, lvl2 };
 
 class GameManager
 {
