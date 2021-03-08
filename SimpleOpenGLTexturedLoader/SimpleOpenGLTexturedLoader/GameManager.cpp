@@ -116,10 +116,16 @@ GameManager::GameManager() {
 1 -> Floor
 2 -> Sofa
 3 -> Chair
-4 -> Bin
-5 -> Ball
-6 -> Stairs
-7 -> Doll
+4 -> Ball
+5 -> Stairs
+6 -> Doll
+7 -> Menu
+8 -> TxtPlay
+9 -> TxtTutorial
+10 -> TxtCredits
+11 -> TxtExit
+12 -> ImgTutorial
+13 -> ImgCredits
 */
 
 //funzione di RENDER OBJ
@@ -129,7 +135,7 @@ void GameManager::drawObj(GameObj obj) {
 		//render per ostacoli diversi
 
 		if (obj.tag == player_tag) {
-			glTranslatef(obj.x, 0.f, 0.f);
+			glTranslatef(obj.x, 1.f, 0.f);
 			if (isJumping) {
 				glTranslatef(0.f, 1.f, 0.f);
 				glRotatef(30.f, 1.f, 0, 0);
@@ -149,12 +155,12 @@ void GameManager::drawObj(GameObj obj) {
 
 			case stair:
 				glTranslatef(obj.x, 0.f, obj.z - player.z);
-				RenderModelByIndex(6);
+				RenderModelByIndex(5);
 				break;
 
 			case deadly_obstacle:
 				glTranslatef(obj.x, 0.f, obj.z - player.z);
-				RenderModelByIndex(7);
+				RenderModelByIndex(6);
 				break;
 
 			case bumpy_obstacle:
@@ -164,7 +170,7 @@ void GameManager::drawObj(GameObj obj) {
 
 			case collectable:
 				glTranslatef(obj.x, 0.f, obj.z - player.z);
-				RenderModelByIndex(5);
+				RenderModelByIndex(4);
 				break;
 			}
 		}

@@ -25,6 +25,10 @@ const struct aiScene* scene = NULL;
 GLuint scene_list = 0;
 struct aiVector3D scene_min, scene_max, scene_center;
 
+// current position and rotation animation
+static float angle = 0.f;
+static float transl = 0.f;
+
 // images / texture
 std::map<std::string, GLuint*> textureIdMap;	// map image filenames to textureIds
 GLuint* textureIds;							// pointer to texture Array
@@ -208,11 +212,6 @@ void recursive_render(const struct aiScene* sc, const struct aiNode* nd)
 
 		apply_material(sc->mMaterials[mesh->mMaterialIndex]);
 
-
-		if (mesh->HasTextureCoords(0))
-			glEnable(GL_TEXTURE_2D);
-		else
-			glDisable(GL_TEXTURE_2D);
 		if (mesh->mNormals == NULL)
 		{
 			glDisable(GL_LIGHTING);
@@ -465,9 +464,61 @@ bool LoadScene(const char* path)
 	return TRUE;
 }
 
+void animateTriciclo(void)
+{
+	glTranslatef(0.f, 0.f, -0.46f);
+	//if(gameManager.state == play)
+	if(true)
+		glRotatef(angle, -1.f, 0.f, 0.f);
+	recursive_render(scene, scene->mRootNode->mChildren[0]->mChildren[1]);
+	static GLint prev_time = 0;
+
+	int time = glutGet(GLUT_ELAPSED_TIME);
+	angle += (time - prev_time) * 0.2;
+	prev_time = time;
+
+	glutPostRedisplay();
+}
+
+void animateDoll(void)
+{
+	//glTranslatef(transl, 0.f, 0.f);
+	glRotatef(90.0f, 0.f, 1.f, 0.f);
+	glutPostRedisplay();
+}
+
+void animateBall(void)
+{
+	glRotatef(angle, 0.f, 1.f, 0.f);
+
+	static GLint prev_time = 0;
+
+	int time = glutGet(GLUT_ELAPSED_TIME);
+	angle += (time - prev_time) * 0.01;
+	prev_time = time;
+
+	glutPostRedisplay();
+}
+
 void RenderModelByIndex(int index)
 {
-	recursive_render(scene, scene->mRootNode->mChildren[index]);
+	if (index == 0) {
+		glDisable(GL_TEXTURE_2D);
+		recursive_render(scene, scene->mRootNode->mChildren[0]->mChildren[0]);
+		animateTriciclo();
+		glEnable(GL_TEXTURE_2D);
+	}
+	else if (index == 4) {
+		animateBall();
+		recursive_render(scene, scene->mRootNode->mChildren[4]);
+	}
+	else if (index == 6) {
+		animateDoll();
+		recursive_render(scene, scene->mRootNode->mChildren[6]);
+	}
+	else {
+		recursive_render(scene, scene->mRootNode->mChildren[index]);
+	}
 
 	glCallList(scene_list);
 }
