@@ -58,7 +58,7 @@ int const obj_dim = 30;
 GameObj obj[obj_dim];
 int const bObj_dim = 4;
 Button bObj[bObj_dim];
-int const images_dim = 1;
+int const images_dim = 3;
 Button images[images_dim];
 
 void setup() {
@@ -106,12 +106,14 @@ GameManager::GameManager() {
 	obj[28] = GameObj(-1.f, -80.f, 0.f, bumpy_obstacle);
 	obj[29] = GameObj(1.f, -104.f, 0.f, bumpy_obstacle);
 
-	bObj[0] = Button(-4.5f, 2.f, 1.f,1.f,bPlay);
-	bObj[1] = Button(-4.5f, 1.f, 1.f, 1.f, bTutorial);
-	bObj[2] = Button(-4.5f, 0.f, 1.f, 1.f, bCredits);
-	bObj[3] = Button(-4.5f, -1.f, 1.f, 1.f, bExit);
+	bObj[0] = Button(-4.f, 2.f, 1.f,2.f, bPlay);
+	bObj[1] = Button(-4.f, 1.f, 1.f, 2.f, bTutorial);
+	bObj[2] = Button(-4.f, 0.f, 1.f, 2.f, bCredits);
+	bObj[3] = Button(-4.f, -1.f, 1.f, 2.f, bExit);
 	
-	images[0] = Button(0.f, 0.f, 1.f, 1.f,image);
+	images[0] = Button(0.f, 0.f, 1.f, 1.f, image);
+	images[1] = Button(0.f, 0.f, 1.f, 1.f, tutorial_image);
+	images[2] = Button(0.f, 0.f, 1.f, 1.f, credits_image);
 
 	setup(); //vedi sopra
 }
@@ -121,47 +123,73 @@ GameManager::GameManager() {
 1 -> Floor
 2 -> Sofa
 3 -> Chair
-4 -> Bin
-5 -> Ball
-6 -> Stairs
-7 -> Doll
+4 -> Ball
+5 -> Stairs
+6 -> Doll
+7 -> Menu
+8 -> TxtPlay
+9 -> TxtTutorial
+10 -> TxtCredits
+11 -> TxtExit
+12 -> ImgTutorial
+13 -> ImgCredits
 */
 
 //funzione di RENDER BUTTONS
 void GameManager::drawButton(Button but){
 	if (but.toRender) {
+		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
-			glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
-			//glOrtho(-5.5, 5.5, -3.3, 3.3, 0, -100);
-			gluOrtho2D(-5.5, 5.5, -3.3, 3.3);
+			glOrtho(-6, 6, -3.375f, 3.375f, 0, -100);
+			//gluOrtho2D(-6, 6, -3.375f, 3.375f);
 
 			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
 
-			glTranslatef(but.x, 0.f, but.z);
-
-			switch (but.bType) {
-			case image:
-				//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
-				RenderModelByIndex(8);
-				break;
-			case bPlay:
-				//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
-				RenderModelByIndex(9);
-				break;
-			case bCredits:
-				//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
-				RenderModelByIndex(10);
-				break;
-			case bTutorial:
-				//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
-				RenderModelByIndex(11);
-				break;
-			case bExit:
-				//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
-				RenderModelByIndex(12);
-				break;
-			}
+				switch (but.bType) {
+				
+				case image:
+					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+					glRotatef(90.f, 0.f, 0.f, 1.f);
+					glTranslatef(but.x, but.z, 0.f);
+					RenderModelByIndex(7);
+					break;
+				/*
+				case tutorial_image:
+					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+					glRotatef(90.f, 0.f, 0.f, 1.f);
+					glTranslatef(but.x, but.z, 0.f);
+					RenderModelByIndex(12);
+					break; 
+				case credits_image:
+					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+					glRotatef(90.f, 0.f, 0.f, 1.f);
+					glTranslatef(but.x, but.z, 0.f);
+					RenderModelByIndex(13);
+					break; */
+				case bPlay:
+					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+					glTranslatef(but.x, but.z, 0.f);
+					RenderModelByIndex(8);
+					break;
+				case bTutorial:
+					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+					glTranslatef(but.x, but.z, 0.f);
+					RenderModelByIndex(9);
+					break;
+				case bCredits:
+					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+					glTranslatef(but.x, but.z, 0.f);
+					RenderModelByIndex(10);
+					break;
+				case bExit:
+					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+					glTranslatef(but.x, but.z, 0.f);
+					RenderModelByIndex(11);
+					break;
+				}
+			glPopMatrix();
 		glPopMatrix();
 	}
 }
@@ -173,7 +201,7 @@ void GameManager::drawObj(GameObj obj) {
 		//render per ostacoli diversi
 
 		if (obj.tag == player_tag) {
-			glTranslatef(obj.x, 0.f, 0.f);
+			glTranslatef(obj.x, 1.f, 0.f);
 			if (isJumping) {
 				glTranslatef(0.f, 1.f, 0.f);
 				glRotatef(30.f, 1.f, 0, 0);
@@ -193,12 +221,12 @@ void GameManager::drawObj(GameObj obj) {
 
 			case stair:
 				glTranslatef(obj.x, 0.f, obj.z - player.z);
-				RenderModelByIndex(6);
+				RenderModelByIndex(5);
 				break;
 
 			case deadly_obstacle:
 				glTranslatef(obj.x, 0.f, obj.z - player.z);
-				RenderModelByIndex(7);
+				RenderModelByIndex(6);
 				break;
 
 			case bumpy_obstacle:
@@ -208,7 +236,7 @@ void GameManager::drawObj(GameObj obj) {
 
 			case collectable:
 				glTranslatef(obj.x, 0.f, obj.z - player.z);
-				RenderModelByIndex(5);
+				RenderModelByIndex(4);
 				break;
 			}
 		}
@@ -376,28 +404,43 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 
 		//stato MENU
 	case menu:
-		for (int i = 0; i < 3; i++) {
-			if(bObj[i].isColliding(x, y)){ //controllo posizione del mouse
+		if (key == '*') {
+			printf("Mouse clicked in (%f,%f)\n", (float) x * 12.f / 600.f - 6.f, (float)y * 6.750f / 900.f - 3.375f);
+			//printf("Mouse clicked in (%d,%d)\n", x,y);
+			for (int i = 0; i < 3; i++) {
+				if(bObj[i].isColliding((float) x*12.f/600.f - 6.f, (float) y * 6.750f/900.f - 3.375f)){ //controllo posizione del mouse
+				//if (bObj[i].isColliding(x,y)){
 				//------ CONTROLLO COLORE SCRITTA ------
-				if (key == GLUT_LEFT_BUTTON) {
 
-					//---- DEACTIVATE MENU OBJECTS -----
+					//deactivate images (not background -> index 0)
+					for (int index = 1; index < images_dim; index++) {
+						images[index].toRender = false;
+					}
 
 					//controllo quale bottone è clicked
-					switch (bObj[i].bType) {
+					switch ((int)bObj[i].bType) {
 					case bPlay:
-						//---- DEACTIVATE MENU OBJECTS -----
+						printf("Play selected\n");
+						for (int index = 1; index < images_dim; index++) {
+							bObj[index].toRender = false;
+						}
 						state = paused;
+						glutPostRedisplay();
 						break;
 					case bTutorial:
-						//---- ACTIVATE TUTORIAL IMAGE PLANE -----
+						printf("Tutorial selected\n");
+						images[1].toRender = true;
 						menu_state = tutorial;
+						glutPostRedisplay();
 						break;
 					case bCredits:
-						//---- ACTIVATE CREDITS IMAGE PLANE -----
+						printf("Credits selected\n");
+						images[2].toRender = true;
 						menu_state = credits;
+						glutPostRedisplay();
 						break;
 					case bExit:
+						printf("Exit selected\n");
 						exit(0); //exits from the game
 						break;
 					}
@@ -486,7 +529,6 @@ void GameManager::every_frame() {
 
 	//MENU
 	case menu:
-		//----- RENDER BUTTONS -----
 		for (int i = 0; i < images_dim; i++) {
 			drawButton(images[i]);
 		}

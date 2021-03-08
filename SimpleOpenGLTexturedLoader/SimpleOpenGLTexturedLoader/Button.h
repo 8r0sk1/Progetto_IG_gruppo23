@@ -2,7 +2,7 @@
 
 #include "GameObj.h"
 
-enum button_type {image,bPlay,bCredits,bExit,bTutorial};
+enum button_type {image,tutorial_image,credits_image,bPlay,bCredits,bExit,bTutorial};
 
 class Button : public GameObj
 {

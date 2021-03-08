@@ -49,6 +49,11 @@ void keyboard(unsigned char key, int x, int y) {
 	return;
 }
 
+void mouse(int button, int state, int x, int y) {
+	gameManager.inputManager('*', x, y);
+	return;
+}
+
 void idle() {
 	int time = glutGet(GLUT_ELAPSED_TIME);
 	gameManager.my_idle(time);
@@ -70,6 +75,7 @@ int main(int argc, char** argv)
 
 	//CODICE NOSTRO
 	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouse);
 	glutIdleFunc(idle);
 
 	if (!LoadScene("..//_models//OpenGLModels.dae"))
