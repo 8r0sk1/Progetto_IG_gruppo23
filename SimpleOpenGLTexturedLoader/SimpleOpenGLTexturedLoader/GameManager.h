@@ -1,5 +1,6 @@
 #pragma once
 #include"GameObj.h"
+#include"Button.h"
 
 enum state_type { menu, play, score, paused, dead};
 enum level_type { lvl1, lvl2 };
@@ -13,6 +14,7 @@ public:
 
 	GameManager();
 
+	void drawButton(Button but);
 	void drawObj(GameObj obj);
 	void my_idle(int time);
 	void every_frame();

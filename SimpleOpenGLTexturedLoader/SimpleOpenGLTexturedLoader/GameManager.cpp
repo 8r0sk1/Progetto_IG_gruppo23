@@ -3,7 +3,7 @@
 
 #define pi 3.14159265359
 
-state_type state = paused;
+state_type state = menu;
 menu_state_type menu_state = empty;
 level_type level = lvl1;
 
@@ -55,8 +55,11 @@ type type_obstacle() {
 
 //POSIZIONAMENTO OGGETTI (statica --> DA MODIFICARE)
 int const obj_dim = 30;
-GameObj obj[30];
-Button bObj[4];
+GameObj obj[obj_dim];
+int const bObj_dim = 4;
+Button bObj[bObj_dim];
+int const images_dim = 1;
+Button images[images_dim];
 
 void setup() {
 	speed = 0; //resetto velocità player
@@ -65,7 +68,7 @@ void setup() {
 }
 
 GameManager::GameManager() {
-	state = paused;
+	state = menu;
 
 	player = GameObj(0.f, 0.f, 0.f, player_tag);
 	player.reset(); //faccio reset = setup
@@ -103,10 +106,12 @@ GameManager::GameManager() {
 	obj[28] = GameObj(-1.f, -80.f, 0.f, bumpy_obstacle);
 	obj[29] = GameObj(1.f, -104.f, 0.f, bumpy_obstacle);
 
-	bObj[0] = Button(-4.5f,2.f,1.f,1.f,bPlay);
-	bObj[0] = Button(-4.5f, 1.f, 1.f, 1.f, bTutorial);
-	bObj[0] = Button(-4.5f, 0.f, 1.f, 1.f, bCredits);
-	bObj[0] = Button(-4.5f, -1.f, 1.f, 1.f, bExit);
+	bObj[0] = Button(-4.5f, 2.f, 1.f,1.f,bPlay);
+	bObj[1] = Button(-4.5f, 1.f, 1.f, 1.f, bTutorial);
+	bObj[2] = Button(-4.5f, 0.f, 1.f, 1.f, bCredits);
+	bObj[3] = Button(-4.5f, -1.f, 1.f, 1.f, bExit);
+	
+	images[0] = Button(0.f, 0.f, 1.f, 1.f,image);
 
 	setup(); //vedi sopra
 }
@@ -121,6 +126,45 @@ GameManager::GameManager() {
 6 -> Stairs
 7 -> Doll
 */
+
+//funzione di RENDER BUTTONS
+void GameManager::drawButton(Button but){
+	if (but.toRender) {
+		glPushMatrix();
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			//glOrtho(-5.5, 5.5, -3.3, 3.3, 0, -100);
+			gluOrtho2D(-5.5, 5.5, -3.3, 3.3);
+
+			glMatrixMode(GL_MODELVIEW);
+
+			glTranslatef(but.x, 0.f, but.z);
+
+			switch (but.bType) {
+			case image:
+				//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+				RenderModelByIndex(8);
+				break;
+			case bPlay:
+				//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+				RenderModelByIndex(9);
+				break;
+			case bCredits:
+				//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+				RenderModelByIndex(10);
+				break;
+			case bTutorial:
+				//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+				RenderModelByIndex(11);
+				break;
+			case bExit:
+				//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+				RenderModelByIndex(12);
+				break;
+			}
+		glPopMatrix();
+	}
+}
 
 //funzione di RENDER OBJ
 void GameManager::drawObj(GameObj obj) {
@@ -443,6 +487,12 @@ void GameManager::every_frame() {
 	//MENU
 	case menu:
 		//----- RENDER BUTTONS -----
+		for (int i = 0; i < images_dim; i++) {
+			drawButton(images[i]);
+		}
+		for (int i = 0; i < bObj_dim; i++) {
+			drawButton(bObj[i]);
+		}
 
 		break;
 	}
