@@ -68,3 +68,25 @@ int fps_calc(int time, int prev_time) {
 	if(prev_time!=0)
 		return (1 / ( (float) (time - prev_time) / 1000));
 }
+
+void get3Dpos(float* x, float* y) {
+	GLint viewport[4];
+	GLdouble modelview[16];
+	GLdouble projection[16];
+	GLfloat winX, winY, winZ;
+	GLdouble object_x, object_y, object_z;
+	float mouse_x = *x;
+	float mouse_y = *y;
+	glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+	glGetDoublev(GL_PROJECTION_MATRIX, projection);
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	winX = (float)mouse_x;
+	winY = (float)viewport[3] - (float)mouse_y - 1.0f;
+	glReadBuffer(GL_BACK);
+	glReadPixels(mouse_x, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
+	gluUnProject((GLdouble)winX, (GLdouble)winY, (GLdouble)winZ, modelview, projection, viewport, &object_x, &object_y, &object_z);
+	*x = object_x;
+	*y = object_y;
+	//*pp.z = object_z;
+}

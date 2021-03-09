@@ -21,3 +21,5 @@ void renderDeadText();
 void renderScoreText();
 
 int fps_calc(int, int);
+
+void get3Dpos(float* x, float* y);

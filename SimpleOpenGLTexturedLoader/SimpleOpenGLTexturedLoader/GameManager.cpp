@@ -405,11 +405,17 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		//stato MENU
 	case menu:
 		if (key == '*') {
-			printf("Mouse clicked in (%f,%f)\n", (float) x * 12.f / 600.f - 6.f, (float)y * 6.750f / 900.f - 3.375f);
+			float xf = (float)x;
+			float yf = (float)y;
+			get3Dpos(&xf, &yf);
+			//printf("Mouse clicked in (%f,%f)\n", (float) x * 12.f / 600.f - 6.f, (float)y * 6.750f / 900.f - 3.375f);
 			//printf("Mouse clicked in (%d,%d)\n", x,y);
+			printf("Mouse clicked in (%f,%f)\n", xf,yf);
+
 			for (int i = 0; i < 3; i++) {
-				if(bObj[i].isColliding((float) x*12.f/600.f - 6.f, (float) y * 6.750f/900.f - 3.375f)){ //controllo posizione del mouse
+				//if(bObj[i].isColliding((float) x*12.f/600.f - 6.f, (float) y * 6.750f/900.f - 3.375f)){ //controllo posizione del mouse
 				//if (bObj[i].isColliding(x,y)){
+				if (bObj[i].isColliding(xf,yf)){
 				//------ CONTROLLO COLORE SCRITTA ------
 
 					//deactivate images (not background -> index 0)
