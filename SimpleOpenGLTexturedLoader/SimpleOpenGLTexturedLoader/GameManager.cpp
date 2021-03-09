@@ -163,8 +163,8 @@ void GameManager::drawButton(Button but){
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
 			glLoadIdentity();
-			glOrtho(-6, 6, -3.375f, 3.375f, 0, -100);
-			//gluOrtho2D(-6, 6, -3.375f, 3.375f);
+			//glOrtho(-6, 6, -3.375f, 3.375f, 0, -100);
+			gluOrtho2D(-6, 6, -3.375f, 3.375f);
 
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
@@ -173,8 +173,8 @@ void GameManager::drawButton(Button but){
 				
 				case image:
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
+					glTranslatef(but.x, but.z, -0.1f);
 					glRotatef(90.f, 0.f, 0.f, 1.f);
-					glTranslatef(but.x, but.z, 0.f);
 					RenderModelByIndex(7); 
 					break;
 				case tutorial_image:
