@@ -464,11 +464,11 @@ bool LoadScene(const char* path)
 	return TRUE;
 }
 
-void animateTriciclo(void)
+void animateTriciclo(state_type game_state)
 {
 	glTranslatef(0.f, 0.f, -0.46f);
-	//if(gameManager.state == play)
-	if(true)
+	if(game_state == play)
+	//if(true)
 		glRotatef(angle, -1.f, 0.f, 0.f);
 	recursive_render(scene, scene->mRootNode->mChildren[0]->mChildren[1]);
 	static GLint prev_time = 0;
@@ -500,15 +500,18 @@ void animateBall(void)
 	glutPostRedisplay();
 }
 
-void RenderModelByIndex(int index)
-{
+void RenderModelByIndex_triciclo(int index, state_type game_state) {
 	if (index == 0) {
 		glDisable(GL_TEXTURE_2D);
 		recursive_render(scene, scene->mRootNode->mChildren[0]->mChildren[0]);
-		animateTriciclo();
+		animateTriciclo(game_state);
 		glEnable(GL_TEXTURE_2D);
 	}
-	else if (index == 4) {
+}
+
+void RenderModelByIndex(int index)
+{
+	if (index == 4) {
 		animateBall();
 		recursive_render(scene, scene->mRootNode->mChildren[4]);
 	}

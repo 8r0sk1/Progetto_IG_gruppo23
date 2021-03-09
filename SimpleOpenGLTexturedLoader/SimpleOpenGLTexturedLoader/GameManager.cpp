@@ -106,14 +106,17 @@ GameManager::GameManager() {
 	obj[28] = GameObj(-1.f, -80.f, 0.f, bumpy_obstacle);
 	obj[29] = GameObj(1.f, -104.f, 0.f, bumpy_obstacle);
 
-	bObj[0] = Button(-4.f, 2.f, 1.f,2.f, bPlay);
-	bObj[1] = Button(-4.f, 1.f, 1.f, 2.f, bTutorial);
-	bObj[2] = Button(-4.f, 0.f, 1.f, 2.f, bCredits);
-	bObj[3] = Button(-4.f, -1.f, 1.f, 2.f, bExit);
+	bObj[0] = Button(-4.f, 2.f, 0.5f, 1.f, bPlay);
+	bObj[1] = Button(-4.f, 1.f, 0.5f, 1.f, bTutorial);
+	bObj[2] = Button(-4.f, 0.f, 0.5f, 1.f, bCredits);
+	bObj[3] = Button(-4.f, -1.f, 0.5f, 1.f, bExit);
 	
 	images[0] = Button(0.f, 0.f, 1.f, 1.f, image);
-	images[1] = Button(0.f, 0.f, 1.f, 1.f, tutorial_image);
-	images[2] = Button(0.f, 0.f, 1.f, 1.f, credits_image);
+	images[1] = Button(2.f, 0.f, 1.f, 1.f, tutorial_image);
+	images[2] = Button(2.f, 0.f, 1.f, 1.f, credits_image);
+
+	images[1].toRender = false;
+	images[2].toRender = false;
 
 	setup(); //vedi sopra
 }
@@ -155,19 +158,18 @@ void GameManager::drawButton(Button but){
 					glTranslatef(but.x, but.z, 0.f);
 					RenderModelByIndex(7);
 					break;
-				/*
 				case tutorial_image:
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
-					glRotatef(90.f, 0.f, 0.f, 1.f);
+					//glRotatef(90.f, 0.f, 0.f, 1.f);
 					glTranslatef(but.x, but.z, 0.f);
 					RenderModelByIndex(12);
 					break; 
 				case credits_image:
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
-					glRotatef(90.f, 0.f, 0.f, 1.f);
+					//glRotatef(90.f, 0.f, 0.f, 1.f);
 					glTranslatef(but.x, but.z, 0.f);
 					RenderModelByIndex(13);
-					break; */
+					break;
 				case bPlay:
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
 					glTranslatef(but.x, but.z, 0.f);
@@ -208,7 +210,7 @@ void GameManager::drawObj(GameObj obj) {
 			}
 			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
 			if(state == dead) glRotatef(60.f, 0.f, 0.f, 1.f);
-			RenderModelByIndex(0);
+			RenderModelByIndex_triciclo(0,(state_type)state);
 		}
 
 		if (obj.tag == floor_tag) {
@@ -321,6 +323,8 @@ void GameManager::my_idle(int time) {
 
 		//fps calculation
 		fps = fps_calc(time, prev_time);
+
+		//--- ANIMAZIONI DI SPOSTAMENTO ---
 
 		break;
 
