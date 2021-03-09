@@ -71,6 +71,16 @@ int fps_calc(int time, int prev_time) {
 }
 
 void get3Dpos(float* x, float* y) {
+
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	//glOrtho(-6, 6, -3.375f, 3.375f, 0, -100);
+	gluOrtho2D(-6, 6, -3.375f, 3.375f);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+
 	GLint viewport[4];
 	GLdouble modelview[16];
 	GLdouble projection[16];
@@ -90,4 +100,7 @@ void get3Dpos(float* x, float* y) {
 	*x = object_x;
 	*y = object_y;
 	//*pp.z = object_z;
+
+	glPopMatrix();
+	glPopMatrix();
 }

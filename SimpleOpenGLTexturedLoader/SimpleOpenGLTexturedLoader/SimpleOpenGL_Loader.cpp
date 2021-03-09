@@ -23,20 +23,6 @@ void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//SETUP PER PLAY
-	if (gameManager.state == play || gameManager.state == paused || gameManager.state == dead) {
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		//aspect ratio 1.5 tra bordi orizzontali e verticali (900x600)
-		glOrtho(-5.f, 5.f, -3.3f, 3.3f, 0.f, 100.f); //SETUP PROIEZIONE
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		gluLookAt(0.f, 5.f, 0.3f,
-			0.f, 0.f, -2.f,
-			0.f, 1.f, 0.f);
-	}
-
 	gameManager.every_frame(); //definizione in GameManager
 	glutSwapBuffers();
 }

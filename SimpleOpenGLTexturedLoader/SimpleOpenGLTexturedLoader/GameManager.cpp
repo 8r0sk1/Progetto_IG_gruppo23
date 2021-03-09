@@ -61,10 +61,16 @@ Button bObj[bObj_dim];
 int const images_dim = 3;
 Button images[images_dim];
 
-void setup() {
+void playerSetup() {
 	speed = 0; //resetto velocità player
 	chronometer = 0;
 	boosts = 0; //resetto boost
+}
+
+void lvl2_setup() {
+	for (int i = 0; i < obj_dim; i++) {
+		obj[i].toRender = true;
+	}
 
 	//reimposto collectable balls
 	for (int i = 0; i < obj_dim; i++) {
@@ -72,10 +78,38 @@ void setup() {
 			obj[i].toRender = true;
 		}
 	}
+
+	playerSetup();
+}
+
+void lvl1_setup() {
+	for (int i = (obj_dim-1)/2; i < obj_dim; i++) {
+		obj[i].toRender = false;
+	}
+	obj[obj_dim - 1].toRender = true;
+
+	//reimposto collectable balls
+	for (int i = 0; i < obj_dim; i++) {
+		if (obj[i].tag == collectable) {
+			obj[i].toRender = true;
+		}
+	}
+
+	playerSetup();
+}
+
+void menu_setup() {
+	for (int index = 0; index < bObj_dim; index++) {
+		bObj[index].toRender = true;
+	}
+	for (int index = 0; index < images_dim; index++) {
+		images[index].toRender = true;
+	}
 }
 
 GameManager::GameManager() {
 	state = menu;
+	level = lvl1;
 
 	player = GameObj(0.f, 0.f, 0.f, player_tag);
 	player.reset(); //faccio reset = setup
@@ -137,7 +171,7 @@ GameManager::GameManager() {
 	images[1].toRender = false;
 	images[2].toRender = false;
 
-	setup(); //vedi sopra
+	playerSetup(); //vedi sopra
 }
 
 /*
@@ -168,6 +202,7 @@ void GameManager::drawButton(Button but){
 
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
+				glLoadIdentity();
 
 				switch (but.bType) {
 				
@@ -222,56 +257,69 @@ void GameManager::drawButton(Button but){
 
 //funzione di RENDER OBJ
 void GameManager::drawObj(GameObj obj) {
-	if (obj.toRender) { //obj.toRender
+	//SETUP PER PLAY
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+		glLoadIdentity();
+		//aspect ratio 1.5 tra bordi orizzontali e verticali (900x600)
+		glOrtho(-5.f, 5.f, -3.3f, 3.3f, 0.f, 100.f); //SETUP PROIEZIONE
+
+		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
-		//render per ostacoli diversi
+		glLoadIdentity();
+			gluLookAt(0.f, 5.f, 0.3f,
+					0.f, 0.f, -2.f,
+					0.f, 1.f, 0.f);
+			if (obj.toRender) { //obj.toRender
+				//render per ostacoli diversi
 
-		if (obj.tag == player_tag) {
-			glTranslatef(obj.x, 0.2f, 0.f);
-			if (isJumping) {
-				glTranslatef(0.f, 1.f, 0.f);
-				glRotatef(30.f, 1.f, 0, 0);
-			}
-			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
-			if (state == dead) glRotatef(60.f, 0.f, 0.f, 1.f);
-			RenderModelByIndex_triciclo(0, (state_type)state, speed);
-		}
+				if (obj.tag == player_tag) {
+					glTranslatef(obj.x, 0.2f, 0.f);
+					if (isJumping) {
+						glTranslatef(0.f, 1.f, 0.f);
+						glRotatef(30.f, 1.f, 0, 0);
+					}
+					glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
+					if (state == dead) glRotatef(60.f, 0.f, 0.f, 1.f);
+					RenderModelByIndex_triciclo(0, (state_type)state, speed);
+				}
 
-		if (obj.tag == floor_tag) {
-			glTranslatef(0.f, 0.f, obj.z - player.z);
-			RenderModelByIndex(1);
-		}
+				if (obj.tag == floor_tag) {
+					glTranslatef(0.f, 0.f, obj.z - player.z);
+					RenderModelByIndex(1);
+				}
 
-		if (obj.tag == collectable_ui){
-			glTranslatef(obj.x, 1.f, obj.z);
-			RenderModelByIndex(4);
-		}
+				if (obj.tag == collectable_ui){
+					glTranslatef(obj.x, 1.f, obj.z);
+					RenderModelByIndex(4);
+				}
 
-		if (obj.z - 3 < player.z && obj.z + 7 > player.z) {
-			switch (obj.tag) {
+				if (obj.z - 3 < player.z && obj.z + 7 > player.z) {
+					switch (obj.tag) {
 
-			case stair:
-				glTranslatef(obj.x, 0.f, obj.z - player.z);
-				RenderModelByIndex(5);
-				break;
+					case stair:
+						glTranslatef(obj.x, 0.f, obj.z - player.z);
+						RenderModelByIndex(5);
+						break;
 
-			case deadly_obstacle:
-				glTranslatef(obj.x, 0.f, obj.z - player.z);
-				RenderModelByIndex(6);
-				break;
+					case deadly_obstacle:
+						glTranslatef(obj.x, 0.f, obj.z - player.z);
+						RenderModelByIndex(6);
+						break;
 
-			case bumpy_obstacle:
-				glTranslatef(obj.x, 0.f, obj.z - player.z);
-				RenderModelByIndex(2);
-				break;
+					case bumpy_obstacle:
+						glTranslatef(obj.x, 0.f, obj.z - player.z);
+						RenderModelByIndex(2);
+						break;
 
-			case collectable:
-				glTranslatef(obj.x, 0.f, obj.z - player.z);
-				RenderModelByIndex(4);
-				break;
-			}
-		}
+					case collectable:
+						glTranslatef(obj.x, 0.f, obj.z - player.z);
+						RenderModelByIndex(4);
+						break;
+					}
+				}
 
+		glPopMatrix();
 		glPopMatrix();
 	}
 	return;
@@ -355,6 +403,7 @@ void GameManager::my_idle(int time) {
 
 		//--- ANIMAZIONI DI SPOSTAMENTO ---
 
+		glutPostRedisplay();
 		break;
 
 	//PAUSE
@@ -365,8 +414,6 @@ void GameManager::my_idle(int time) {
 	}
 
 	prev_time = time;
-
-	glutPostRedisplay();
 }
 
 //gestione movimento del mouse
@@ -420,7 +467,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 			//reset
 		case 'r':
 			state = paused;
-			setup();
+			playerSetup();
 			glutPostRedisplay();
 			break;
 		}
@@ -434,6 +481,13 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 			state = play;
 			glutPostRedisplay();
 			break;
+			//esc
+		case 27:
+			state = menu;
+			menu_state = empty;
+			menu_setup(); //NON FUNZIONA????
+			glutPostRedisplay();
+			break;
 		}
 		break;
 
@@ -444,7 +498,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		case 32:
 		case 'r':
 			state = paused;
-			setup();
+			playerSetup();
 			glutPostRedisplay();
 			break;
 		}
@@ -478,6 +532,9 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 							bObj[index].toRender = false;
 						}
 						state = paused;
+						level = lvl1;
+						playerSetup();
+						lvl1_setup;
 						glutPostRedisplay();
 						break;
 					case bTutorial:
@@ -505,10 +562,14 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		//stato SCORE
 	case score:
 		switch (key) {
+			//barra spaziatrice
 		case 32:
 			state = paused;
-			setup(); //TO LEVEL 2
+			level = lvl2;
+			playerSetup();
+			lvl2_setup(); //TO LEVEL 2
 			glutPostRedisplay();
+			break;
 		}
 		break;
 	}
@@ -524,7 +585,7 @@ void GameManager::every_frame() {
 		//RENDER SCENA 3D
 		drawObj(player);
 		drawObj(floor_carpet);
-		//RENDER DEGLI OGGETTI
+
 		for (int i = 0; i < obj_dim; i++) {
 			drawObj(obj[i]);
 		}

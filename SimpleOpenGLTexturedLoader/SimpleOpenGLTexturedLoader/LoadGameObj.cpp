@@ -511,20 +511,20 @@ void RenderModelByIndex_triciclo(int index, state_type game_state, float speed) 
 		glEnable(GL_TEXTURE_2D);
 	}
 
-	glCallList(scene_list);
+	glCallList(scene_list); //???
 }
 
 void RenderModelByIndex_button(int index, bool isMouseOn) {
 		if (isMouseOn) {
-			printf("Scritta bianca: button %d\n", index);
+			//printf("Scritta bianca: button %d\n", index);
 			recursive_render(scene, scene->mRootNode->mChildren[index]->mChildren[0]);
 		}
 		else {
-			printf("Scritta gialla: button %d\n", index);
+			//printf("Scritta gialla: button %d\n", index);
 			recursive_render(scene, scene->mRootNode->mChildren[index]->mChildren[1]);
 		}
 
-		glCallList(scene_list);
+		glCallList(scene_list); //???
 }
 
 void RenderModelByIndex(int index)
@@ -541,7 +541,7 @@ void RenderModelByIndex(int index)
 		recursive_render(scene, scene->mRootNode->mChildren[index]);
 	}
 
-	glCallList(scene_list);
+	glCallList(scene_list); //???
 }
 
 void ReleaseScene()
