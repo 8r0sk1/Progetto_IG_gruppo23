@@ -54,7 +54,7 @@ type type_obstacle() {
 }
 
 //POSIZIONAMENTO OGGETTI (statica --> DA MODIFICARE)
-int const obj_dim = 30;
+int const obj_dim = 31;
 GameObj obj[obj_dim];
 int const bObj_dim = 4;
 Button bObj[bObj_dim];
@@ -65,6 +65,12 @@ void setup() {
 	speed = 0; //resetto velocità player
 	chronometer = 0;
 	boosts = 0; //resetto boost
+
+	for (int i = 0; i < obj_dim; i++) {
+		if (obj[i].tag == collectable) {
+			obj[i].toRender = true;
+		}
+	}
 }
 
 GameManager::GameManager() {
@@ -105,6 +111,18 @@ GameManager::GameManager() {
 	obj[27] = GameObj(1.f, -64.f, 0.f, bumpy_obstacle);
 	obj[28] = GameObj(-1.f, -80.f, 0.f, bumpy_obstacle);
 	obj[29] = GameObj(1.f, -104.f, 0.f, bumpy_obstacle);
+
+	//UI gameObj
+	obj[30] = GameObj(-4.45f, -1.f, 0.f, collectable_ui);
+
+	for (int i = 0; i < obj_dim; i++) {
+		switch (obj[i].tag) {
+		case stair:
+			obj[i].dim_x = 5.f;
+			obj[i].dim_z = 3.f;
+			break;
+		}
+	}
 
 	bObj[0] = Button(-4.f, 2.f, 0.5f, 1.f, bPlay);
 	bObj[1] = Button(-4.f, 1.f, 0.5f, 1.f, bTutorial);
@@ -162,12 +180,13 @@ void GameManager::drawButton(Button but){
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
 					//glRotatef(90.f, 0.f, 0.f, 1.f);
 					glTranslatef(but.x, but.z, 0.f);
+					glRotatef(90.f, 0.f, 0.f, 1.f);
 					RenderModelByIndex(12);
 					break; 
 				case credits_image:
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
-					//glRotatef(90.f, 0.f, 0.f, 1.f);
 					glTranslatef(but.x, but.z, 0.f);
+					glRotatef(90.f, 0.f, 0.f, 1.f);
 					RenderModelByIndex(13);
 					break;
 				case bPlay:
@@ -203,19 +222,24 @@ void GameManager::drawObj(GameObj obj) {
 		//render per ostacoli diversi
 
 		if (obj.tag == player_tag) {
-			glTranslatef(obj.x, 1.f, 0.f);
+			glTranslatef(obj.x, 0.2f, 0.f);
 			if (isJumping) {
 				glTranslatef(0.f, 1.f, 0.f);
 				glRotatef(30.f, 1.f, 0, 0);
 			}
 			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
-			if(state == dead) glRotatef(60.f, 0.f, 0.f, 1.f);
-			RenderModelByIndex_triciclo(0,(state_type)state);
+			if (state == dead) glRotatef(60.f, 0.f, 0.f, 1.f);
+			RenderModelByIndex_triciclo(0, (state_type)state);
 		}
 
 		if (obj.tag == floor_tag) {
 			glTranslatef(0.f, 0.f, obj.z - player.z);
 			RenderModelByIndex(1);
+		}
+
+		if (obj.tag == collectable_ui){
+			glTranslatef(obj.x, 1.f, obj.z);
+			RenderModelByIndex(4);
 		}
 
 		if (obj.z - 3 < player.z && obj.z + 7 > player.z) {
@@ -416,7 +440,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 			//printf("Mouse clicked in (%d,%d)\n", x,y);
 			printf("Mouse clicked in (%f,%f)\n", xf,yf);
 
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < bObj_dim; i++) {
 				//if(bObj[i].isColliding((float) x*12.f/600.f - 6.f, (float) y * 6.750f/900.f - 3.375f)){ //controllo posizione del mouse
 				//if (bObj[i].isColliding(x,y)){
 				if (bObj[i].isColliding(xf,yf)){
@@ -431,7 +455,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 					switch ((int)bObj[i].bType) {
 					case bPlay:
 						printf("Play selected\n");
-						for (int index = 1; index < images_dim; index++) {
+						for (int index = 1; index < bObj_dim; index++) {
 							bObj[index].toRender = false;
 						}
 						state = paused;
@@ -487,7 +511,7 @@ void GameManager::every_frame() {
 		}
 
 		//UI render
-		renderUI(speed/maxSpeed, chronometer / 1000, 0);
+		renderUI(speed/maxSpeed, chronometer / 1000, boosts);
 		renderFps(fps);
 
 		break;
@@ -503,7 +527,7 @@ void GameManager::every_frame() {
 		}
 
 		//UI render
-		renderUI(speed / maxSpeed, chronometer / 1000, 0);
+		renderUI(speed / maxSpeed, chronometer / 1000, boosts);
 		renderPressToPlayText();
 
 		break;
@@ -518,7 +542,7 @@ void GameManager::every_frame() {
 		}
 
 		//UI render
-		renderUI(speed / maxSpeed, chronometer / 1000, 0);
+		renderUI(speed / maxSpeed, chronometer / 1000, boosts);
 		renderDeadText();
 
 		break;
@@ -532,7 +556,7 @@ void GameManager::every_frame() {
 			drawObj(obj[i]);
 		}
 
-		renderUI(speed / maxSpeed, chronometer / 1000, 0);
+		renderUI(speed / maxSpeed, chronometer / 1000, boosts);
 		renderScoreText();
 
 		break;

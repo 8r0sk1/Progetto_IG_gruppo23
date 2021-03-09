@@ -47,6 +47,7 @@ void renderUI(float velocity_str, float time_str, float balls_str)
 {
 	output(-4.5f, -0.25f, to_string(velocity_str)+" m/s");
 	output(-4.5f, 0.25f, to_string(time_str)+" seconds");
+	output(-4.5f, -0.5f, "  x" + to_string(balls_str));
 }
 
 void renderDeadText()

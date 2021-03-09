@@ -55,7 +55,7 @@
 	void GameObj::reset() {
 		if (tag == player_tag) {
 			x = 0;
-			z = 4.f; //default
+			z = 3.f; //default
 			//z = -110.f; //cheat
 			angle = 0;
 		}
