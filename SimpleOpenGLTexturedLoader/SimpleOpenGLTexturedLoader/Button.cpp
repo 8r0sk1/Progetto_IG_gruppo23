@@ -1,6 +1,5 @@
 #include "Button.h"
 
-
 Button::Button() {
 	x = 0;
 	z = 0;
@@ -10,6 +9,7 @@ Button::Button() {
 	tag = button;
 	bType = bPlay;
 	toRender = true;
+	isMouseOn = false;
 }
 
 Button::Button(float pos_x, float pos_z, float l_x, float l_z, button_type type) {
@@ -21,4 +21,5 @@ Button::Button(float pos_x, float pos_z, float l_x, float l_z, button_type type)
 	tag = button;
 	bType = type;
 	toRender = true;
+	isMouseOn = false;
 }

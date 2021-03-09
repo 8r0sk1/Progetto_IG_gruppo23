@@ -8,6 +8,7 @@ class Button : public GameObj
 {
 public:
 	button_type bType;
+	bool isMouseOn;
 
 	Button();
 	Button(float x,float z,float dim_x,float dim_z,button_type);

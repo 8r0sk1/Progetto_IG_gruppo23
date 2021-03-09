@@ -54,6 +54,10 @@ void mouse(int button, int state, int x, int y) {
 	return;
 }
 
+void mouseMotionFunc(int x, int y) {
+	gameManager.mouseMotion(x, y);
+}
+
 void idle() {
 	int time = glutGet(GLUT_ELAPSED_TIME);
 	gameManager.my_idle(time);
@@ -76,6 +80,7 @@ int main(int argc, char** argv)
 	//CODICE NOSTRO
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse);
+	glutPassiveMotionFunc(mouseMotionFunc);
 	glutIdleFunc(idle);
 
 	if (!LoadScene("..//_models//OpenGLModels.dae"))

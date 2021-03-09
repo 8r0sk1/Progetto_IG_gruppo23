@@ -18,6 +18,7 @@ public:
 	void drawObj(GameObj obj);
 	void my_idle(int time);
 	void every_frame();
+	void mouseMotion(int x, int y);
 	void inputManager(unsigned char key, int x, int y);
 };
 

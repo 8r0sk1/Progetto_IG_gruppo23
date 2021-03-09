@@ -66,6 +66,7 @@ void setup() {
 	chronometer = 0;
 	boosts = 0; //resetto boost
 
+	//reimposto collectable balls
 	for (int i = 0; i < obj_dim; i++) {
 		if (obj[i].tag == collectable) {
 			obj[i].toRender = true;
@@ -124,10 +125,10 @@ GameManager::GameManager() {
 		}
 	}
 
-	bObj[0] = Button(-4.f, 2.f, 0.5f, 1.f, bPlay);
-	bObj[1] = Button(-4.f, 1.f, 0.5f, 1.f, bTutorial);
-	bObj[2] = Button(-4.f, 0.f, 0.5f, 1.f, bCredits);
-	bObj[3] = Button(-4.f, -1.f, 0.5f, 1.f, bExit);
+	bObj[0] = Button(-4.f, 2.f, 1.5f, 0.8f, bPlay);
+	bObj[1] = Button(-4.f, 1.f, 3.f, 0.8f, bTutorial);
+	bObj[2] = Button(-4.f, 0.f, 3.f, 0.8f, bCredits);
+	bObj[3] = Button(-4.f, -1.f, 1.5f, 0.8f, bExit);
 	
 	images[0] = Button(0.f, 0.f, 1.f, 1.f, image);
 	images[1] = Button(2.f, 0.f, 1.f, 1.f, tutorial_image);
@@ -174,7 +175,7 @@ void GameManager::drawButton(Button but){
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
 					glRotatef(90.f, 0.f, 0.f, 1.f);
 					glTranslatef(but.x, but.z, 0.f);
-					RenderModelByIndex(7);
+					RenderModelByIndex(7); 
 					break;
 				case tutorial_image:
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
@@ -192,22 +193,26 @@ void GameManager::drawButton(Button but){
 				case bPlay:
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
 					glTranslatef(but.x, but.z, 0.f);
-					RenderModelByIndex(8);
+					RenderModelByIndex_button(8, but.isMouseOn);
+					//RenderModelByIndex(8);
 					break;
 				case bTutorial:
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
 					glTranslatef(but.x, but.z, 0.f);
-					RenderModelByIndex(9);
+					RenderModelByIndex_button(9, but.isMouseOn);
+					//RenderModelByIndex(9);
 					break;
 				case bCredits:
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
 					glTranslatef(but.x, but.z, 0.f);
-					RenderModelByIndex(10);
+					RenderModelByIndex_button(10, but.isMouseOn);
+					//RenderModelByIndex(10);
 					break;
 				case bExit:
 					//glTranslatef(but.x, but.z, 0.f); //object z become y of 2D
 					glTranslatef(but.x, but.z, 0.f);
-					RenderModelByIndex(11);
+					RenderModelByIndex_button(11, but.isMouseOn);
+					//RenderModelByIndex(11);
 					break;
 				}
 			glPopMatrix();
@@ -364,6 +369,21 @@ void GameManager::my_idle(int time) {
 	glutPostRedisplay();
 }
 
+//gestione movimento del mouse
+void GameManager::mouseMotion(int x, int y){
+	float xf = (float)x;
+	float yf = (float)y;
+	get3Dpos(&xf, &yf);
+	for (int i = 0; i < bObj_dim; i++) {
+		if (bObj[i].isColliding(xf, yf)) {
+			bObj[i].isMouseOn = true;
+			printf("Mouse is on: button %d\n",i);
+			glutPostRedisplay();
+		}
+		else bObj[i].isMouseOn = false;
+	}
+}
+
 //gestione dell'input a seconda dello stato
 void GameManager::inputManager(unsigned char key, int x, int y) {
 
@@ -444,7 +464,6 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 				//if(bObj[i].isColliding((float) x*12.f/600.f - 6.f, (float) y * 6.750f/900.f - 3.375f)){ //controllo posizione del mouse
 				//if (bObj[i].isColliding(x,y)){
 				if (bObj[i].isColliding(xf,yf)){
-				//------ CONTROLLO COLORE SCRITTA ------
 
 					//deactivate images (not background -> index 0)
 					for (int index = 1; index < images_dim; index++) {
