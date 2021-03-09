@@ -27,6 +27,7 @@ struct aiVector3D scene_min, scene_max, scene_center;
 
 // current position and rotation animation
 static float angle = 0.f;
+static float angle_ball = 0.f;
 static float transl = 0.f;
 
 // images / texture
@@ -464,7 +465,7 @@ bool LoadScene(const char* path)
 	return TRUE;
 }
 
-void animateTriciclo(state_type game_state)
+void animateTriciclo(state_type game_state, float speed)
 {
 	glTranslatef(0.f, 0.f, -0.46f);
 	if(game_state == play)
@@ -474,7 +475,9 @@ void animateTriciclo(state_type game_state)
 	static GLint prev_time = 0;
 
 	int time = glutGet(GLUT_ELAPSED_TIME);
-	angle += (time - prev_time) * 0.2;
+	
+	angle += (time - prev_time) * 120 * speed;
+	
 	prev_time = time;
 
 	glutPostRedisplay();
@@ -489,22 +492,22 @@ void animateDoll(void)
 
 void animateBall(void)
 {
-	glRotatef(angle, 0.f, 1.f, 0.f);
+	glRotatef(angle_ball, 0.f, 1.f, 0.f);
 
 	static GLint prev_time = 0;
 
 	int time = glutGet(GLUT_ELAPSED_TIME);
-	angle += (time - prev_time) * 0.01;
+	angle_ball += (time - prev_time) * 0.1;
 	prev_time = time;
 
 	glutPostRedisplay();
 }
 
-void RenderModelByIndex_triciclo(int index, state_type game_state) {
+void RenderModelByIndex_triciclo(int index, state_type game_state, float speed) {
 	if (index == 0) {
 		glDisable(GL_TEXTURE_2D);
 		recursive_render(scene, scene->mRootNode->mChildren[0]->mChildren[0]);
-		animateTriciclo(game_state);
+		animateTriciclo(game_state,speed);
 		glEnable(GL_TEXTURE_2D);
 	}
 }

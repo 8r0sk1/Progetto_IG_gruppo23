@@ -229,7 +229,7 @@ void GameManager::drawObj(GameObj obj) {
 			}
 			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
 			if (state == dead) glRotatef(60.f, 0.f, 0.f, 1.f);
-			RenderModelByIndex_triciclo(0, (state_type)state);
+			RenderModelByIndex_triciclo(0, (state_type)state, speed);
 		}
 
 		if (obj.tag == floor_tag) {
