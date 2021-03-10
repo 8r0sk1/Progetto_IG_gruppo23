@@ -19,6 +19,7 @@ void renderUI(float, float, float);
 void renderPressToPlayText();
 void renderDeadText();
 void renderScoreText();
+void renderScore2Text();
 
 int fps_calc(int, int);
 

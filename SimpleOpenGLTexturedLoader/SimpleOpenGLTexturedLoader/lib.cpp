@@ -65,6 +65,11 @@ void renderScoreText() {
 	output(-1.5f, -1.f, "Press SPACEBAR to start LEVEL 2");
 }
 
+void renderScore2Text() {
+	output(-0.75f, 0.f, "LEVEL 2 completed");
+	output(-1.5f, -1.f, "Press SPACEBAR to return to MENU");
+}
+
 int fps_calc(int time, int prev_time) {
 	if(prev_time!=0)
 		return (1 / ( (float) (time - prev_time) / 1000));

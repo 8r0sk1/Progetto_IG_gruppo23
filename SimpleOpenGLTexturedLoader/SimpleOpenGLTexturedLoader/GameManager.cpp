@@ -53,6 +53,13 @@ void playerSetup() {
 	speed = 0; //resetto velocità player
 	chronometer = 0;
 	boosts = 0; //resetto boost
+
+		//reimposto collectable balls
+	for (int i = 0; i < obj_dim; i++) {
+		if (obj[i].tag == collectable) {
+			obj[i].toRender = true;
+		}
+	}
 }
 
 void lvl2_setup() {
@@ -60,28 +67,15 @@ void lvl2_setup() {
 		obj[i].toRender = true;
 	}
 
-	//reimposto collectable balls
-	for (int i = 0; i < obj_dim; i++) {
-		if (obj[i].tag == collectable) {
-			obj[i].toRender = true;
-		}
-	}
-
 	playerSetup();
 }
 
 void lvl1_setup() {
 	for (int i = (obj_dim-1)/2; i < obj_dim; i++) {
+	//for (int i = 0; i < obj_dim; i++) {
 		obj[i].toRender = false;
 	}
 	obj[obj_dim - 1].toRender = true;
-
-	//reimposto collectable balls
-	for (int i = 0; i < obj_dim; i++) {
-		if (obj[i].tag == collectable) {
-			obj[i].toRender = true;
-		}
-	}
 
 	playerSetup();
 }
@@ -93,6 +87,8 @@ void menu_setup() {
 	for (int index = 0; index < images_dim; index++) {
 		images[index].toRender = true;
 	}
+	images[1].toRender = false;
+	images[2].toRender = false;
 }
 
 GameManager::GameManager() {
@@ -248,72 +244,70 @@ void GameManager::drawObj(GameObj obj, int i) {
 	//SETUP PER PLAY
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
-		glLoadIdentity();
-		//aspect ratio 1.5 tra bordi orizzontali e verticali (900x600)
-		glOrtho(-5.f, 5.f, -3.3f, 3.3f, 0.f, 100.f); //SETUP PROIEZIONE
+	glLoadIdentity();
+	//aspect ratio 1.5 tra bordi orizzontali e verticali (900x600)
+	glOrtho(-5.f, 5.f, -3.3f, 3.3f, 0.f, 100.f); //SETUP PROIEZIONE
 
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-			gluLookAt(0.f, 5.f, 0.3f,
-					0.f, 0.f, -2.f,
-					0.f, 1.f, 0.f);
-			if (obj.toRender) { //obj.toRender
-				//render per ostacoli diversi
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+		gluLookAt(0.f, 5.f, 0.3f,
+				0.f, 0.f, -2.f,
+				0.f, 1.f, 0.f);
+	if (obj.toRender) { //obj.toRender
+		//render per ostacoli diversi
 
-				if (obj.tag == player_tag) {
-					glTranslatef(obj.x, 0.2f, 0.f);
-					if (isJumping) {
-						glTranslatef(0.f, 1.f, 0.f);
-						glRotatef(30.f, 1.f, 0, 0);
-					}
-					glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
-					if (state == dead) glRotatef(60.f, 0.f, 0.f, 1.f);
-					RenderModelByIndex_triciclo(0, (state_type)state, speed);
-				}
+		if (obj.tag == player_tag) {
+			glTranslatef(obj.x, 0.2f, 0.f);
+			if (isJumping) {
+				glTranslatef(0.f, 1.f, 0.f);
+				glRotatef(30.f, 1.f, 0, 0);
+			}
+			glRotatef(-obj.angle, 0.f, 1.0f, 0.f);
+			if (state == dead) glRotatef(60.f, 0.f, 0.f, 1.f);
+			RenderModelByIndex_triciclo(0, (state_type)state, speed);
+		}
 
-				if (obj.tag == floor_tag) {
-					glTranslatef(0.f, 0.f, obj.z - player.z);
-					RenderModelByIndex(1);
-				}
+		if (obj.tag == floor_tag) {
+			glTranslatef(0.f, 0.f, obj.z - player.z);
+			RenderModelByIndex(1);
+		}
 
-				if (obj.tag == collectable_ui){
-					glTranslatef(obj.x, 1.f, obj.z);
-					RenderModelByIndex(4);
-				}
+		if (obj.tag == collectable_ui){
+			glTranslatef(obj.x, 1.f, obj.z);
+			RenderModelByIndex(4);
+		}
 
-				if (obj.z - 3 < player.z && obj.z + 7 > player.z) {
-					switch (obj.tag) {
+		if (obj.z - 3 < player.z && obj.z + 7 > player.z) {
+			switch (obj.tag) {
 
-					case stair:
-						glTranslatef(obj.x, 0.f, obj.z - player.z);
-						RenderModelByIndex(5);
-						break;
+			case stair:
+				glTranslatef(obj.x, 0.f, obj.z - player.z);
+				RenderModelByIndex(5);
+				break;
 
-					case deadly_obstacle:
-						glTranslatef(obj.x, 0.f, obj.z - player.z);
-						RenderModelByIndex(6);
-						break;
+			case deadly_obstacle:
+				glTranslatef(obj.x, 0.f, obj.z - player.z);
+				RenderModelByIndex(6);
+				break;
 
-					case bumpy_obstacle:
-						glTranslatef(obj.x, 0.f, obj.z - player.z);
-						if(i % 2 == 0)
-							RenderModelByIndex(2);
-						else
-							RenderModelByIndex(3);
-						break;
+			case bumpy_obstacle:
+				glTranslatef(obj.x, 0.f, obj.z - player.z);
+				if(i % 2 == 0)
+					RenderModelByIndex(2);
+				else
+					RenderModelByIndex(3);
+				break;
 
-					case collectable:
-						glTranslatef(obj.x, 0.f, obj.z - player.z);
-						RenderModelByIndex(4);
-						break;
-					}
-				}
-				else {
-				}
+			case collectable:
+				glTranslatef(obj.x, 0.f, obj.z - player.z);
+				RenderModelByIndex(4);
+				break;
+			}
+		}
 
-		glPopMatrix();
-		glPopMatrix();
+	glPopMatrix();
+	glPopMatrix();
 	}
 	return;
 }
@@ -538,7 +532,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 						state = paused;
 						level = lvl1;
 						playerSetup();
-						lvl1_setup;
+						lvl1_setup();
 						glutPostRedisplay();
 						break;
 					case bTutorial:
@@ -568,10 +562,17 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		switch (key) {
 			//barra spaziatrice
 		case 32:
-			state = paused;
-			level = lvl2;
-			playerSetup();
-			lvl2_setup(); //TO LEVEL 2
+			if (level == lvl1) {
+				state = paused;
+				level = lvl2;
+				playerSetup();
+				lvl2_setup(); //TO LEVEL 2
+			}
+			else {
+				state = menu;
+				menu_state = empty;
+				menu_setup();
+			}
 			glutPostRedisplay();
 			break;
 		}
@@ -641,7 +642,8 @@ void GameManager::every_frame() {
 		}
 
 		renderUI(speed / maxSpeed, chronometer / 1000, boosts);
-		renderScoreText();
+		if (level == lvl1)renderScoreText();
+		else renderScore2Text();
 
 		break;
 
