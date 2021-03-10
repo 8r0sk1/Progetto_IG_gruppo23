@@ -31,7 +31,7 @@ int boosts = 0;
 //obstacles init
 float bumpyness = 1.2;
 float collectable_speed = 0.005;
-float deadly_speed = 0.01;
+float deadly_speed = 0.03;
 
 //cronometro di gioco
 float chronometer = 0;
@@ -42,7 +42,7 @@ int prev_time = 0;
 int fps;
 
 //POSIZIONAMENTO OGGETTI (statica --> DA MODIFICARE)
-int const obj_dim = 31;
+int const obj_dim = 61;
 GameObj obj[obj_dim];
 int const bObj_dim = 4;
 Button bObj[bObj_dim];
@@ -55,7 +55,10 @@ void playerSetup() {
 	boosts = 0; //resetto boost
 
 		//reimposto collectable balls
-	for (int i = 0; i < obj_dim; i++) {
+	int max;
+	if (level == lvl1) max = (obj_dim - 1) / 2;
+	else max = obj_dim;
+	for (int i = 0; i < max; i++) {
 		if (obj[i].tag == collectable) {
 			obj[i].toRender = true;
 		}
@@ -100,39 +103,72 @@ GameManager::GameManager() {
 
 	floor_carpet = GameObj(0.f, -5.5f, floor_tag); //da -5.5 a 119 z
 
-	obj[0] = GameObj(-1.f, -40.f, 0.f, collectable); //first level
-	obj[1] = GameObj(0.f, -84.f, 0.f, collectable);
-	obj[2] = GameObj(1.f, -100.f, 0.f, collectable);
-	obj[3] = GameObj(-1.f, -36.f, 0.f, deadly_obstacle);
-	obj[4] = GameObj(1.f, -96.f, 0.f, deadly_obstacle);
-	obj[5] = GameObj(0.f, -4.f, 0.f, stair);
-	obj[6] = GameObj(0.f, -52.f, 0.f, stair);
-	obj[7] = GameObj(1.f, 0.f, 0.f, bumpy_obstacle);
-	obj[8] = GameObj(-1.f, -8.f, 0.f, bumpy_obstacle);
-	obj[9] = GameObj(1.f, -24.f, 0.f, bumpy_obstacle);
-	obj[10] = GameObj(-1.f, -32.f, 0.f, bumpy_obstacle);
-	obj[11] = GameObj(0.f, -56.f, 0.f, bumpy_obstacle);
-	obj[12] = GameObj(1.f, -72.f, 0.f, bumpy_obstacle);
-	obj[13] = GameObj(-1.f, -92.f, 0.f, bumpy_obstacle);
-	obj[14] = GameObj(1.f, -112.f, 0.f, bumpy_obstacle);
-	obj[15] = GameObj(-1.f, -12.f, 0.f, collectable); //second level
-	obj[16] = GameObj(0.f, -16.f, 0.f, deadly_obstacle);
-	obj[17] = GameObj(0.f, -28.f, 0.f, stair);
-	obj[18] = GameObj(0.f, -108.f, 0.f, stair);
-	obj[19] = GameObj(1.f, -68.f, 0.f, bumpy_obstacle);
-	obj[20] = GameObj(-1.f, -48.f, 0.f, bumpy_obstacle);
-	obj[21] = GameObj(0.f, -120.f, 0.f, bumpy_obstacle);
-	obj[22] = GameObj(1.f, -60.f, 0.f, collectable);
-	obj[23] = GameObj(-1.f, -116.f, 0.f, deadly_obstacle);
-	obj[24] = GameObj(0.f, -76.f, 0.f, stair);
-	obj[25] = GameObj(-1.f, -20.f, 0.f, bumpy_obstacle);
-	obj[26] = GameObj(0.f, -44.f, 0.f, bumpy_obstacle);
-	obj[27] = GameObj(1.f, -64.f, 0.f, bumpy_obstacle);
-	obj[28] = GameObj(-1.f, -80.f, 0.f, bumpy_obstacle);
-	obj[29] = GameObj(1.f, -104.f, 0.f, bumpy_obstacle);
+	//first level
+	obj[0] = GameObj(0.f, -1.f, 0.f, bumpy_obstacle);
+	obj[1] = GameObj(0.f, -4.f, 0.f, stair); //
+	obj[2] = GameObj(-1.f, -12.f, 0.f, collectable);
+	obj[3] = GameObj(-1.f, -12.f, 0.f, bumpy_obstacle);
+	obj[4] = GameObj(0.f, -16.f, 0.f, deadly_obstacle);//
+	obj[5] = GameObj(0.f, -24.f, 0.f, bumpy_obstacle);
+	obj[6] = GameObj(0.f, -28.f, 0.f, stair);//
+	obj[7] = GameObj(-1.f, -30.f, 0.f, bumpy_obstacle);
+	obj[8] = GameObj(1.f, -32.f, 0.f, bumpy_obstacle);
+	obj[9] = GameObj(-1.f, -36.f, 0.f, deadly_obstacle); //
+	obj[10] = GameObj(-1.f, -40.f, 0.f, collectable);
+	obj[11] = GameObj(0.f, -44.f, 0.f, bumpy_obstacle);
+	obj[12] = GameObj(-1.f, -48.f, 0.f, bumpy_obstacle); //
+	obj[13] = GameObj(0.f, -52.f, 0.f, stair);
+	obj[14] = GameObj(0.f, -56.f, 0.f, bumpy_obstacle); //
+	obj[15] = GameObj(1.f, -60.f, 0.f, collectable);
+	obj[16] = GameObj(1.f, -64.f, 0.f, bumpy_obstacle);
+	obj[17] = GameObj(0.f, -68.f, 0.f, bumpy_obstacle); //
+	obj[18] = GameObj(-1.5f, -72.f, 0.f, bumpy_obstacle);
+	obj[19] = GameObj(0.f, -76.f, 0.f, stair); //
+	obj[20] = GameObj(-1.f, -80.f, 0.f, bumpy_obstacle);
+	obj[21] = GameObj(0.f, -84.f, 0.f, collectable); //
+	obj[22] = GameObj(-1.f, -92.f, 0.f, bumpy_obstacle);
+	obj[23] = GameObj(1.f, -96.f, 0.f, deadly_obstacle); //
+	obj[24] = GameObj(1.f, -100.f, 0.f, collectable);
+	obj[25] = GameObj(1.f, -104.f, 0.f, bumpy_obstacle);
+	obj[26] = GameObj(0.f, -108.f, 0.f, stair); //
+	obj[27] = GameObj(1.f, -112.f, 0.f, bumpy_obstacle);
+	obj[28] = GameObj(-1.f, -116.f, 0.f, deadly_obstacle); //
+	obj[29] = GameObj(0.f, -120.f, 0.f, bumpy_obstacle);
+
+	//second level
+	obj[30] = GameObj(-1.5f, -6.f, 0.f, bumpy_obstacle);
+	obj[31] = GameObj(1.5f, -7.f, 0.f, bumpy_obstacle);
+	obj[32] = GameObj(0.f, -10.f, 0.f, bumpy_obstacle);
+	obj[33] = GameObj(1.f, -14.f, 0.f, deadly_obstacle);
+	obj[34] = GameObj(1.5f, -16.f, 0.f, bumpy_obstacle);
+	obj[35] = GameObj(1.f, -22.f, 0.f, bumpy_obstacle);
+	obj[36] = GameObj(-1.f, -23.f, 0.f, bumpy_obstacle);
+	obj[37] = GameObj(1.f, -26.f, 0.f, bumpy_obstacle);
+	obj[38] = GameObj(1.5f, -30.f, 0.f, bumpy_obstacle);
+	obj[39] = GameObj(1.f, -34.f, 0.f, deadly_obstacle);
+	obj[40] = GameObj(1.f, -37.f, 0.f, bumpy_obstacle);
+	obj[41] = GameObj(-1.f, -40.f, 0.f, collectable);
+	obj[42] = GameObj(1.f, -46.f, 0.f, bumpy_obstacle);
+	obj[43] = GameObj(1.f, -48.f, 0.f, bumpy_obstacle);
+	obj[44] = GameObj(0.f, -50.f, 0.f, bumpy_obstacle);
+	obj[45] = GameObj(-1.5f, -58.f, 0.f, bumpy_obstacle);
+	obj[46] = GameObj(0.f, -61.f, 0.f, bumpy_obstacle);
+	obj[47] = GameObj(-1.f, -63.f, 0.f, deadly_obstacle);
+	obj[48] = GameObj(-1.f, -66.f, 0.f, bumpy_obstacle);
+	obj[49] = GameObj(1.5f, -71.f, 0.f, bumpy_obstacle);
+	obj[50] = GameObj(1.f, -79.f, 0.f, bumpy_obstacle);
+	obj[51] = GameObj(0.f, -84.f, 0.f, deadly_obstacle);
+	obj[52] = GameObj(1.f, -92.f, 0.f, bumpy_obstacle);
+	obj[53] = GameObj(-1.f, -98.f, 0.f, deadly_obstacle);
+	obj[54] = GameObj(-1.f, -102.f, 0.f, bumpy_obstacle);
+	obj[55] = GameObj(-1.f, -104.f, 0.f, bumpy_obstacle);
+	obj[56] = GameObj(-1.5f, -112.f, 0.f, bumpy_obstacle);
+	obj[57] = GameObj(-1.f, -115.f, 0.f, bumpy_obstacle);
+	obj[58] = GameObj(0.f, -118.f, 0.f, deadly_obstacle);
+	obj[59] = GameObj(1.f, -120.f, 0.f, bumpy_obstacle);
 
 	//UI gameObj
-	obj[30] = GameObj(-4.45f, -1.f, 0.f, collectable_ui);
+	obj[60] = GameObj(-4.45f, -1.f, 0.f, collectable_ui);
 
 	for (int i = 0; i < obj_dim; i++) {
 		switch (obj[i].tag) {
@@ -334,7 +370,7 @@ void GameManager::my_idle(int time) {
 		//COLLISION DETECTION
 		for (int i = 0; i < obj_dim; i++) {
 			if (obj[i].isColliding(player.x, player.z) && obj[i].toRender) { //controllo che avvenga collisione e che oggetto sia renderizzato a schermo
-				//fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i + 1), obj[i].tag);
+				fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i), obj[i].tag);
 
 				//float xs, zs, radians;
 				//BEHAVIOR di COLLISIONE con OBJ
@@ -422,7 +458,8 @@ void GameManager::mouseMotion(int x, int y){
 	for (int i = 0; i < bObj_dim; i++) {
 		if (bObj[i].isColliding(xf, yf)) {
 			bObj[i].isMouseOn = true;
-			printf("Mouse is on: button %d\n",i);
+			//DEBUG
+			//printf("Mouse is on: button %d\n",i);
 		}
 		else bObj[i].isMouseOn = false;
 		glutPostRedisplay();
@@ -530,7 +567,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 							bObj[index].toRender = false;
 						}
 						state = paused;
-						level = lvl1;
+						level = lvl1; //default
 						playerSetup();
 						lvl1_setup();
 						glutPostRedisplay();
@@ -642,7 +679,7 @@ void GameManager::every_frame() {
 		}
 
 		renderUI(speed / maxSpeed, chronometer / 1000, boosts);
-		if (level == lvl1)renderScoreText();
+		if (level == lvl1) renderScoreText();
 		else renderScore2Text();
 
 		break;
