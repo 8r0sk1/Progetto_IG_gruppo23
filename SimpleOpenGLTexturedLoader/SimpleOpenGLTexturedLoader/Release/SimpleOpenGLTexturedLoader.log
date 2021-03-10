@@ -1,7 +1,13 @@
-﻿  GameManager.cpp
+﻿  Button.cpp
+  GameManager.cpp
+  GameObj.cpp
+  lib.cpp
+  Obstacle.cpp
+  SimpleOpenGL_Loader.cpp
+  LoadGameObj.cpp
   Generating code
-  15 of 323 functions ( 4.6%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  23 of 323 functions ( 7.1%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  SimpleOpenGLTexturedLoader.vcxproj -> D:\Documents\Polito\IG\Progetto_IG_gruppo23\SimpleOpenGLTexturedLoader\Release\SimpleOpenGLTexturedLoader.exe
+  SimpleOpenGLTexturedLoader.vcxproj -> C:\Users\strobopc\Documents\Progetto_IG_23\SimpleOpenGLTexturedLoader\Release\SimpleOpenGLTexturedLoader.exe

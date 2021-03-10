@@ -1,8 +1,7 @@
 #include "lib.h"
 #include <sstream>
 
-void* font = GLUT_BITMAP_9_BY_15; //for bitmap
-//void* font = GLUT_STROKE_ROMAN; //for stroke
+void* font = GLUT_BITMAP_9_BY_15;
 
 template <typename T>
 std::string to_string(T value)
@@ -27,9 +26,7 @@ void output(float x, float y, std::string str)
 		glRasterPos2f(x, y);
 		int len = str.length();
 		for (int i = 0; i < len; i++) {
-			//glScalef(5.f, 5.f, 5.f); //NOT WORKING
 			glutBitmapCharacter(font, str[i]);
-			//glutStrokeCharacter(font, str[i]);
 		}
 	glPopMatrix();
 
@@ -80,7 +77,6 @@ void get3Dpos(float* x, float* y) {
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	//glOrtho(-6, 6, -3.375f, 3.375f, 0, -100);
 	gluOrtho2D(-6, 6, -3.375f, 3.375f);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -104,7 +100,6 @@ void get3Dpos(float* x, float* y) {
 	gluUnProject((GLdouble)winX, (GLdouble)winY, (GLdouble)winZ, modelview, projection, viewport, &object_x, &object_y, &object_z);
 	*x = object_x;
 	*y = object_y;
-	//*pp.z = object_z;
 
 	glPopMatrix();
 	glPopMatrix();

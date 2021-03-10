@@ -375,7 +375,8 @@ void GameManager::my_idle(int time) {
 		//COLLISION DETECTION
 		for (int i = 0; i < obj_dim; i++) {
 			if (obj[i].isColliding(player.x, player.z) && obj[i].toRender) { //controllo che avvenga collisione e che oggetto sia renderizzato a schermo
-				fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i), obj[i].tag);
+				//DEBUG
+				//fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i), obj[i].tag);
 
 				//float xs, zs, radians;
 				//BEHAVIOR di COLLISIONE con OBJ
@@ -479,7 +480,7 @@ void GameManager::mouseMotion(int x, int y){
 
 //gestione dell'input a seconda dello stato
 void GameManager::inputManager(unsigned char key, int x, int y) {
-
+	//DEBUG
 	//fprintf(stdout, "Key pressed: %c\n", key);
 
 	switch ((int)state) {
@@ -489,12 +490,14 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		case 'a':
 			if (player.angle >= -angles) {
 				player.angle -= angles;
+				//DEBUG
 				//fprintf(stdout, "pos_x = %f\n", player.x);
 			}
 			break;
 		case 'd':
 			if (player.angle <= angles) {
 				player.angle += angles;
+				//DEBUG
 				//fprintf(stdout, "pos_x = %f\n", player.x);
 			}
 			break;
@@ -557,13 +560,10 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 			float xf = (float)x;
 			float yf = (float)y;
 			get3Dpos(&xf, &yf);
-			//printf("Mouse clicked in (%f,%f)\n", (float) x * 12.f / 600.f - 6.f, (float)y * 6.750f / 900.f - 3.375f);
-			//printf("Mouse clicked in (%d,%d)\n", x,y);
-			printf("Mouse clicked in (%f,%f)\n", xf,yf);
+			//DEBUG
+			//printf("Mouse clicked in (%f,%f)\n", xf,yf);
 
 			for (int i = 0; i < bObj_dim; i++) {
-				//if(bObj[i].isColliding((float) x*12.f/600.f - 6.f, (float) y * 6.750f/900.f - 3.375f)){ //controllo posizione del mouse
-				//if (bObj[i].isColliding(x,y)){
 				if (bObj[i].isColliding(xf,yf)){
 
 					//deactivate images (not background -> index 0)
@@ -574,7 +574,8 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 					//controllo quale bottone è clicked
 					switch ((int)bObj[i].bType) {
 					case bPlay:
-						printf("Play selected\n");
+						//DEBUG
+						//printf("Play selected\n");
 						for (int index = 1; index < bObj_dim; index++) {
 							bObj[index].toRender = false;
 						}
@@ -585,19 +586,22 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 						glutPostRedisplay();
 						break;
 					case bTutorial:
-						printf("Tutorial selected\n");
+						//DEBUG
+						//printf("Tutorial selected\n");
 						images[1].toRender = true;
 						menu_state = tutorial;
 						glutPostRedisplay();
 						break;
 					case bCredits:
-						printf("Credits selected\n");
+						//DEBUG
+						//printf("Credits selected\n");
 						images[2].toRender = true;
 						menu_state = credits;
 						glutPostRedisplay();
 						break;
 					case bExit:
-						printf("Exit selected\n");
+						//DEBUG
+						//printf("Exit selected\n");
 						exit(0); //exits from the game
 						break;
 					}

@@ -64,6 +64,7 @@
 	bool GameObj::isColliding(float pos_x, float pos_z) { //controlla se un punto (x,z) si trova nell'area di collisione dell'oggetto
 		float dx = pos_x - x;
 		float dz = pos_z - z;
+		//DEBUG
 		//fprintf(stdout, "dx=%f dz=%f\n", dx, dz);
 		if (fabsf(dx) < dim_x/2 && fabsf(dz) < dim_z/2) {
 			return true;

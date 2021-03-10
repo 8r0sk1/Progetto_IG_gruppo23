@@ -485,7 +485,6 @@ void animateTriciclo(state_type game_state, float speed)
 
 void animateDoll(void)
 {
-	//glTranslatef(transl, 0.f, 0.f);
 	glRotatef(90.0f, 0.f, 1.f, 0.f);
 	glutPostRedisplay();
 }
@@ -509,22 +508,24 @@ void RenderModelByIndex_triciclo(int index, state_type game_state, float speed) 
 	animateTriciclo(game_state,speed);
 	glEnable(GL_TEXTURE_2D);
 
-	glCallList(scene_list); //???
+	glCallList(scene_list);
 }
 
 void RenderModelByIndex_button(int index, bool isMouseOn) {
 	glDisable(GL_TEXTURE_2D);
 	if (!isMouseOn) {
+		//DEBUG
 		//printf("Scritta bianca: button %d\n", index);
 		recursive_render(scene, scene->mRootNode->mChildren[index]->mChildren[0]);
 	}
 	else {
+		//DEBUG
 		//printf("Scritta gialla: button %d\n", index);
 		recursive_render(scene, scene->mRootNode->mChildren[index]->mChildren[1]);
 	}
 	glEnable(GL_TEXTURE_2D);
 
-	glCallList(scene_list); //???
+	glCallList(scene_list);
 }
 
 void RenderModelByIndex(int index)
@@ -537,7 +538,7 @@ void RenderModelByIndex(int index)
 	}
 	recursive_render(scene, scene->mRootNode->mChildren[index]);
 
-	glCallList(scene_list); //???
+	glCallList(scene_list);
 }
 
 void ReleaseScene()

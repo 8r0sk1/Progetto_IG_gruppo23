@@ -1,5 +1,4 @@
 //NOSTRE LIBRERIE
-//#include<stdlib.h>
 #include "lib.h"
 
 //FINE NOSTRE LIBRERIE
@@ -29,7 +28,7 @@ void display(void)
 
 // ----------------------------------------------------------------------------
 
-//CODICE NOSTRO
+// ----------------------------------------------------------------------------
 void keyboard(unsigned char key, int x, int y) {
 	gameManager.inputManager(key, x, y);
 	return;
@@ -50,7 +49,7 @@ void idle() {
 	return;
 }
 
-//FINE CODICE NOSTRO
+// ----------------------------------------------------------------------------
 
 int main(int argc, char** argv)
 {
@@ -59,11 +58,11 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInit(&argc, argv);
 
-	glutCreateWindow("Shining_project");
+	glutCreateWindow("The Shining Project");
+
+	//LINKING FUNZIONI FINESTRA GLUT
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
-
-	//CODICE NOSTRO
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse);
 	glutPassiveMotionFunc(mouseMotionFunc);
