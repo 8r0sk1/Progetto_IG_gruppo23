@@ -1,25 +1,25 @@
-Info,  T15088: Load ..//_models//OpenGLModels.dae
-Info,  T15088: Found a matching importer for this file format
-Info,  T15088: Import root directory is '..//_models/'
-Warn,  T15088: Collada: No material specified for subgroup "" in geometry "Cube_086-mesh".
-Info,  T15088: Entering post processing pipeline
-Warn,  T15088: Found 180 degenerated primitives
-Info,  T15088: Points: 0, Lines: 2, Triangles: 28, Polygons: 0 (Meshes, X = removed)
-Error, T15088: FindInvalidDataProcess fails on mesh normals: Found zero-length vector
-Error, T15088: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
+Info,  T7436: Load ..//_models//OpenGLModels.dae
+Info,  T7436: Found a matching importer for this file format
+Info,  T7436: Import root directory is '..//_models/'
+Warn,  T7436: Collada: No material specified for subgroup "" in geometry "Cube_086-mesh".
+Info,  T7436: Entering post processing pipeline
+Warn,  T7436: Found 180 degenerated primitives
+Info,  T7436: Points: 0, Lines: 2, Triangles: 28, Polygons: 0 (Meshes, X = removed)
+Error, T7436: FindInvalidDataProcess fails on mesh normals: Found zero-length vector
+Error, T7436: FindInvalidDataProcess fails on mesh uvcoords: All vectors are identical
 Skipping one or more lines with the same contents
-Warn,  T15088: Simplified dummy tracks with just one key
+Warn,  T7436: Simplified dummy tracks with just one key
 Skipping one or more lines with the same contents
-Info,  T15088: FindInvalidDataProcess finished. Found issues ...
-Info,  T15088: GenVertexNormalsProcess finished. Vertex normals have been calculated
-Info,  T15088: Tangents are undefined for line and point meshes
-Error, T15088: Unable to compute tangents: UV0 and normals must be there 
-Info,  T15088: Tangents are undefined for line and point meshes
-Info,  T15088: JoinVerticesProcess finished | Verts in: 478040 out: 93259 | ~80.5%
-Info,  T15088: Removed 95 weights. Input bones: 8. Output bones: 8
-Error, T15088: This algorithm works on triangle meshes only
-Warn,  T15088: Mesh 8: Not suitable for vcache optimization
-Warn,  T15088: Mesh 12: Not suitable for vcache optimization
-Error, T15088: This algorithm works on triangle meshes only
-Info,  T15088: Cache relevant are 26 meshes (159110 faces). Average output ACMR is 0.801986
-Info,  T15088: Leaving post processing pipeline
+Info,  T7436: FindInvalidDataProcess finished. Found issues ...
+Info,  T7436: GenVertexNormalsProcess finished. Vertex normals have been calculated
+Info,  T7436: Tangents are undefined for line and point meshes
+Error, T7436: Unable to compute tangents: UV0 and normals must be there 
+Info,  T7436: Tangents are undefined for line and point meshes
+Info,  T7436: JoinVerticesProcess finished | Verts in: 478040 out: 93259 | ~80.5%
+Info,  T7436: Removed 95 weights. Input bones: 8. Output bones: 8
+Error, T7436: This algorithm works on triangle meshes only
+Warn,  T7436: Mesh 8: Not suitable for vcache optimization
+Warn,  T7436: Mesh 12: Not suitable for vcache optimization
+Error, T7436: This algorithm works on triangle meshes only
+Info,  T7436: Cache relevant are 26 meshes (159110 faces). Average output ACMR is 0.801986
+Info,  T7436: Leaving post processing pipeline
