@@ -15,7 +15,7 @@ public:
 	GameManager();
 
 	void drawButton(Button but);
-	void drawObj(GameObj obj);
+	void drawObj(GameObj obj, int i);
 	void my_idle(int time);
 	void every_frame();
 	void mouseMotion(int x, int y);

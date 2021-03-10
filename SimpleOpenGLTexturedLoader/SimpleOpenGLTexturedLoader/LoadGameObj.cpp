@@ -504,12 +504,10 @@ void animateBall(void)
 }
 
 void RenderModelByIndex_triciclo(int index, state_type game_state, float speed) {
-	if (index == 0) {
-		glDisable(GL_TEXTURE_2D);
-		recursive_render(scene, scene->mRootNode->mChildren[0]->mChildren[0]);
-		animateTriciclo(game_state,speed);
-		glEnable(GL_TEXTURE_2D);
-	}
+	glDisable(GL_TEXTURE_2D);
+	recursive_render(scene, scene->mRootNode->mChildren[0]->mChildren[0]);
+	animateTriciclo(game_state,speed);
+	glEnable(GL_TEXTURE_2D);
 
 	glCallList(scene_list); //???
 }

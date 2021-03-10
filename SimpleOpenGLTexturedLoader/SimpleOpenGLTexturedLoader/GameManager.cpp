@@ -29,7 +29,7 @@ float jump_time = 500; //jumping time in ms
 int boosts = 0;
 
 //bumpyness obstacles
-float bumpyness = 1;
+float bumpyness = 1.2;
 
 //cronometro di gioco
 float chronometer = 0;
@@ -38,20 +38,6 @@ float chronometer_start = 0;
 //variabile tempo
 int prev_time = 0;
 int fps;
-
-//USED???
-type type_obstacle() {
-	int random_obstacle = rand() % 5 + 2;
-	if (random_obstacle == 0) {
-		return bumpy_obstacle;
-	}
-	else if (random_obstacle == 1) {
-		return bumpy_obstacle;
-	}
-	else {
-		return bumpy_obstacle;
-	}
-}
 
 //POSIZIONAMENTO OGGETTI (statica --> DA MODIFICARE)
 int const obj_dim = 31;
@@ -256,7 +242,7 @@ void GameManager::drawButton(Button but){
 }
 
 //funzione di RENDER OBJ
-void GameManager::drawObj(GameObj obj) {
+void GameManager::drawObj(GameObj obj, int i) {
 	//SETUP PER PLAY
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -309,7 +295,10 @@ void GameManager::drawObj(GameObj obj) {
 
 					case bumpy_obstacle:
 						glTranslatef(obj.x, 0.f, obj.z - player.z);
-						RenderModelByIndex(2);
+						if(i % 2 == 0)
+							RenderModelByIndex(2);
+						else
+							RenderModelByIndex(3);
 						break;
 
 					case collectable:
@@ -583,11 +572,11 @@ void GameManager::every_frame() {
 	//PLAY
 	case play:
 		//RENDER SCENA 3D
-		drawObj(player);
-		drawObj(floor_carpet);
+		drawObj(player, 0);
+		drawObj(floor_carpet, 0);
 
 		for (int i = 0; i < obj_dim; i++) {
-			drawObj(obj[i]);
+			drawObj(obj[i], i);
 		}
 
 		//UI render
@@ -599,11 +588,11 @@ void GameManager::every_frame() {
 	//PAUSED
 	case paused:
 		player.reset();
-		drawObj(player);
-		drawObj(floor_carpet);
+		drawObj(player, 0);
+		drawObj(floor_carpet, 0);
 		//RENDER DEGLI OGGETTI
 		for (int i = 0; i < obj_dim; i++) {
-			drawObj(obj[i]);
+			drawObj(obj[i], i);
 		}
 
 		//UI render
@@ -614,11 +603,11 @@ void GameManager::every_frame() {
 	
 	//DEAD
 	case dead:
-		drawObj(player);
-		drawObj(floor_carpet);
+		drawObj(player, 0);
+		drawObj(floor_carpet, 0);
 		//RENDER DEGLI OGGETTI
 		for (int i = 0; i < obj_dim; i++) {
-			drawObj(obj[i]);
+			drawObj(obj[i], i);
 		}
 
 		//UI render
@@ -629,11 +618,11 @@ void GameManager::every_frame() {
 	
 	//SCORE
 	case score:
-		drawObj(player);
-		drawObj(floor_carpet);
+		drawObj(player, 0);
+		drawObj(floor_carpet, 0);
 		//RENDER DEGLI OGGETTI
 		for (int i = 0; i < obj_dim; i++) {
-			drawObj(obj[i]);
+			drawObj(obj[i], i);
 		}
 
 		renderUI(speed / maxSpeed, chronometer / 1000, boosts);
