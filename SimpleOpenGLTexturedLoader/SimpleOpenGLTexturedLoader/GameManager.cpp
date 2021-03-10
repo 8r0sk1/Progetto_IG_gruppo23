@@ -423,9 +423,9 @@ void GameManager::mouseMotion(int x, int y){
 		if (bObj[i].isColliding(xf, yf)) {
 			bObj[i].isMouseOn = true;
 			printf("Mouse is on: button %d\n",i);
-			glutPostRedisplay();
 		}
 		else bObj[i].isMouseOn = false;
+		glutPostRedisplay();
 	}
 }
 
