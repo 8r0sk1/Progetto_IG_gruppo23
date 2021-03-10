@@ -1,5 +1,10 @@
 #pragma once
 #include "lib.h"
+#include <irrKlang.h>
+using namespace irrklang;
+#pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
+
+ISoundEngine* SoundEngine = createIrrKlangDevice();
 
 #define pi 3.14159265359
 
@@ -31,7 +36,7 @@ int boosts = 0;
 //obstacles init
 float bumpyness = 1.2;
 float collectable_speed = 0.005;
-float deadly_speed = 0.03;
+float deadly_speed = 0.02;
 
 //cronometro di gioco
 float chronometer = 0;
@@ -105,34 +110,34 @@ GameManager::GameManager() {
 
 	//first level
 	obj[0] = GameObj(0.f, -1.f, 0.f, bumpy_obstacle);
-	obj[1] = GameObj(0.f, -4.f, 0.f, stair); //
+	obj[1] = GameObj(0.f, -4.f, 0.f, stair);
 	obj[2] = GameObj(-1.f, -12.f, 0.f, collectable);
 	obj[3] = GameObj(-1.f, -12.f, 0.f, bumpy_obstacle);
-	obj[4] = GameObj(0.f, -16.f, 0.f, deadly_obstacle);//
+	obj[4] = GameObj(0.f, -16.f, 0.f, deadly_obstacle);
 	obj[5] = GameObj(0.f, -24.f, 0.f, bumpy_obstacle);
-	obj[6] = GameObj(0.f, -28.f, 0.f, stair);//
+	obj[6] = GameObj(0.f, -28.f, 0.f, stair);
 	obj[7] = GameObj(-1.f, -30.f, 0.f, bumpy_obstacle);
 	obj[8] = GameObj(1.f, -32.f, 0.f, bumpy_obstacle);
-	obj[9] = GameObj(-1.f, -36.f, 0.f, deadly_obstacle); //
+	obj[9] = GameObj(-0.5f, -36.f, 0.f, deadly_obstacle);
 	obj[10] = GameObj(-1.f, -40.f, 0.f, collectable);
 	obj[11] = GameObj(0.f, -44.f, 0.f, bumpy_obstacle);
-	obj[12] = GameObj(-1.f, -48.f, 0.f, bumpy_obstacle); //
+	obj[12] = GameObj(-1.f, -48.f, 0.f, bumpy_obstacle);
 	obj[13] = GameObj(0.f, -52.f, 0.f, stair);
-	obj[14] = GameObj(0.f, -56.f, 0.f, bumpy_obstacle); //
+	obj[14] = GameObj(0.f, -56.f, 0.f, bumpy_obstacle);
 	obj[15] = GameObj(1.f, -60.f, 0.f, collectable);
 	obj[16] = GameObj(1.f, -64.f, 0.f, bumpy_obstacle);
-	obj[17] = GameObj(0.f, -68.f, 0.f, bumpy_obstacle); //
+	obj[17] = GameObj(0.f, -68.f, 0.f, bumpy_obstacle);
 	obj[18] = GameObj(-1.5f, -72.f, 0.f, bumpy_obstacle);
-	obj[19] = GameObj(0.f, -76.f, 0.f, stair); //
+	obj[19] = GameObj(0.f, -76.f, 0.f, stair);
 	obj[20] = GameObj(-1.f, -80.f, 0.f, bumpy_obstacle);
-	obj[21] = GameObj(0.f, -84.f, 0.f, collectable); //
+	obj[21] = GameObj(0.f, -84.f, 0.f, collectable);
 	obj[22] = GameObj(-1.f, -92.f, 0.f, bumpy_obstacle);
-	obj[23] = GameObj(1.f, -96.f, 0.f, deadly_obstacle); //
+	obj[23] = GameObj(0.f, -96.f, 0.f, deadly_obstacle);
 	obj[24] = GameObj(1.f, -100.f, 0.f, collectable);
 	obj[25] = GameObj(1.f, -104.f, 0.f, bumpy_obstacle);
-	obj[26] = GameObj(0.f, -108.f, 0.f, stair); //
+	obj[26] = GameObj(0.f, -108.f, 0.f, stair);
 	obj[27] = GameObj(1.f, -112.f, 0.f, bumpy_obstacle);
-	obj[28] = GameObj(-1.f, -116.f, 0.f, deadly_obstacle); //
+	obj[28] = GameObj(0.f, -116.f, 0.f, deadly_obstacle);
 	obj[29] = GameObj(0.f, -120.f, 0.f, bumpy_obstacle);
 
 	//second level
@@ -145,7 +150,7 @@ GameManager::GameManager() {
 	obj[36] = GameObj(-1.f, -23.f, 0.f, bumpy_obstacle);
 	obj[37] = GameObj(1.f, -26.f, 0.f, bumpy_obstacle);
 	obj[38] = GameObj(1.5f, -30.f, 0.f, bumpy_obstacle);
-	obj[39] = GameObj(1.f, -34.f, 0.f, deadly_obstacle);
+	obj[39] = GameObj(0.5f, -34.f, 0.f, deadly_obstacle);
 	obj[40] = GameObj(1.f, -37.f, 0.f, bumpy_obstacle);
 	obj[41] = GameObj(-1.f, -40.f, 0.f, collectable);
 	obj[42] = GameObj(1.f, -46.f, 0.f, bumpy_obstacle);
@@ -153,13 +158,13 @@ GameManager::GameManager() {
 	obj[44] = GameObj(0.f, -50.f, 0.f, bumpy_obstacle);
 	obj[45] = GameObj(-1.5f, -58.f, 0.f, bumpy_obstacle);
 	obj[46] = GameObj(0.f, -61.f, 0.f, bumpy_obstacle);
-	obj[47] = GameObj(-1.f, -63.f, 0.f, deadly_obstacle);
+	obj[47] = GameObj(0.f, -63.f, 0.f, deadly_obstacle);
 	obj[48] = GameObj(-1.f, -66.f, 0.f, bumpy_obstacle);
 	obj[49] = GameObj(1.5f, -71.f, 0.f, bumpy_obstacle);
 	obj[50] = GameObj(1.f, -79.f, 0.f, bumpy_obstacle);
 	obj[51] = GameObj(0.f, -84.f, 0.f, deadly_obstacle);
 	obj[52] = GameObj(1.f, -92.f, 0.f, bumpy_obstacle);
-	obj[53] = GameObj(-1.f, -98.f, 0.f, deadly_obstacle);
+	obj[53] = GameObj(0.5f, -98.f, 0.f, deadly_obstacle);
 	obj[54] = GameObj(-1.f, -102.f, 0.f, bumpy_obstacle);
 	obj[55] = GameObj(-1.f, -104.f, 0.f, bumpy_obstacle);
 	obj[56] = GameObj(-1.5f, -112.f, 0.f, bumpy_obstacle);
@@ -376,16 +381,16 @@ void GameManager::my_idle(int time) {
 				//BEHAVIOR di COLLISIONE con OBJ
 				switch (obj[i].tag) {
 				case bumpy_obstacle:
-					/*radians = player.angle * 2 * pi / 360;
-					zs = cos(radians) * bumpyness;
-					xs = sin(radians) * bumpyness;
-					player.moveOf(xs, zs);*/
+					SoundEngine->play2D("../_audio/bumpy.wav", false);
 					if (0 < speed) speed = -(maxSpeed + speed) / 5 * bumpyness;
 					break;
 				case deadly_obstacle:
+					SoundEngine->play2D("../_audio/deadly.wav", false);
 					if (!isJumping) state = dead;
+					SoundEngine->play2D("../_audio/dolls.wav", false);
 					break;
 				case collectable:
+					SoundEngine->play2D("../_audio/collectable.wav", false);
 					boosts++;
 					obj[i].toRender = false;
 					break;
@@ -395,15 +400,20 @@ void GameManager::my_idle(int time) {
 							if (speed > maxSpeed / minSpeed_factor) speed = speed * (1 - deltaSpeed * 6000);
 							else speed = maxSpeed / minSpeed_factor;
 						}
-						else state = dead;
+						else {
+							SoundEngine->play2D("../_audio/crash.wav", false);
+							state = dead;
+						}
 					}
 				}
 			}
 		}
 
 		//CONTROLLO BORDER
-		if (!(abs(player.x) < x_border_abs))
+		if (!(abs(player.x) < x_border_abs)) {
+			SoundEngine->play2D("../_audio/crash.wav", false);
 			state = dead;
+		}
 
 		//CONTROLLO JUMP
 		if (!isJumping) {
@@ -415,6 +425,7 @@ void GameManager::my_idle(int time) {
 
 		//CONTROLLO FINE LVL
 		if (player.z < z_finish_lvl1) {
+			SoundEngine->play2D("../_audio/scream.wav", false);
 			state = score;
 		}
 
@@ -489,6 +500,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 			break;
 		case 'w':
 			if (boosts > 0) {
+				SoundEngine->play2D("../_audio/turbo.wav", false);
 				boosts--;
 				speed = speed + deltaSpeed * 100;
 			}
@@ -558,7 +570,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 					for (int index = 1; index < images_dim; index++) {
 						images[index].toRender = false;
 					}
-
+					SoundEngine->play2D("../_audio/menu.wav", false);
 					//controllo quale bottone è clicked
 					switch ((int)bObj[i].bType) {
 					case bPlay:
