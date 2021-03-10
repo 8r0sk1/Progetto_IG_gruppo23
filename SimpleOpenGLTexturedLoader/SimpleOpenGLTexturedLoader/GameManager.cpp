@@ -28,12 +28,13 @@ float jump_time = 500; //jumping time in ms
 //boosts
 int boosts = 0;
 
-//bumpyness obstacles
+//obstacles init
 float bumpyness = 1.2;
+float collectable_speed = 0.003;
 
 //cronometro di gioco
 float chronometer = 0;
-float chronometer_start = 0;
+float chronometer_start = 1;
 
 //variabile tempo
 int prev_time = 0;
@@ -281,6 +282,7 @@ void GameManager::drawObj(GameObj obj, int i) {
 				}
 
 				if (obj.z - 3 < player.z && obj.z + 7 > player.z) {
+					obj.toRender = true;
 					switch (obj.tag) {
 
 					case stair:
@@ -306,6 +308,9 @@ void GameManager::drawObj(GameObj obj, int i) {
 						RenderModelByIndex(4);
 						break;
 					}
+				}
+				else {
+					obj.toRender = false;
 				}
 
 		glPopMatrix();
@@ -391,6 +396,11 @@ void GameManager::my_idle(int time) {
 		fps = fps_calc(time, prev_time);
 
 		//--- ANIMAZIONI DI SPOSTAMENTO ---
+		for (int i = 0; i < obj_dim; i++) {
+			if (obj[i].tag == collectable && obj[i].toRender == true) {
+				obj[i].moveOf(0, collectable_speed);
+			}
+		}
 
 		glutPostRedisplay();
 		break;
