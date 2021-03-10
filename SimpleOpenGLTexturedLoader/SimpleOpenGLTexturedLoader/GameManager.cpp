@@ -30,7 +30,8 @@ int boosts = 0;
 
 //obstacles init
 float bumpyness = 1.2;
-float collectable_speed = 0.003;
+float collectable_speed = 0.005;
+float deadly_speed = 0.01;
 
 //cronometro di gioco
 float chronometer = 0;
@@ -282,7 +283,6 @@ void GameManager::drawObj(GameObj obj, int i) {
 				}
 
 				if (obj.z - 3 < player.z && obj.z + 7 > player.z) {
-					obj.toRender = true;
 					switch (obj.tag) {
 
 					case stair:
@@ -310,7 +310,6 @@ void GameManager::drawObj(GameObj obj, int i) {
 					}
 				}
 				else {
-					obj.toRender = false;
 				}
 
 		glPopMatrix();
@@ -341,7 +340,7 @@ void GameManager::my_idle(int time) {
 		//COLLISION DETECTION
 		for (int i = 0; i < obj_dim; i++) {
 			if (obj[i].isColliding(player.x, player.z) && obj[i].toRender) { //controllo che avvenga collisione e che oggetto sia renderizzato a schermo
-				fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i + 1), obj[i].tag);
+				//fprintf(stdout, "Collisione con OBJ n%d of type %d\n", (i + 1), obj[i].tag);
 
 				//float xs, zs, radians;
 				//BEHAVIOR di COLLISIONE con OBJ
@@ -397,8 +396,14 @@ void GameManager::my_idle(int time) {
 
 		//--- ANIMAZIONI DI SPOSTAMENTO ---
 		for (int i = 0; i < obj_dim; i++) {
-			if (obj[i].tag == collectable && obj[i].toRender == true) {
+			if (obj[i].tag == collectable && (obj[i].z - 3 < player.z && obj[i].z + 7 > player.z)) {
 				obj[i].moveOf(0, collectable_speed);
+			}
+			if (obj[i].tag == deadly_obstacle && (obj[i].z - 3 < player.z && obj[i].z + 7 > player.z)) {
+				if (obj[i].x < -1.5 || obj[i].x > 1.5) {
+					deadly_speed = -deadly_speed;
+				}
+				obj[i].moveOf(deadly_speed, 0);
 			}
 		}
 

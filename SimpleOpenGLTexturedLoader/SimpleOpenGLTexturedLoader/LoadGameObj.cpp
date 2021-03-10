@@ -529,15 +529,11 @@ void RenderModelByIndex(int index)
 {
 	if (index == 4) {
 		animateBall();
-		recursive_render(scene, scene->mRootNode->mChildren[4]);
 	}
-	else if (index == 6) {
+	if (index == 6) {
 		animateDoll();
-		recursive_render(scene, scene->mRootNode->mChildren[6]);
 	}
-	else {
-		recursive_render(scene, scene->mRootNode->mChildren[index]);
-	}
+	recursive_render(scene, scene->mRootNode->mChildren[index]);
 
 	glCallList(scene_list); //???
 }
