@@ -386,9 +386,11 @@ void GameManager::my_idle(int time) {
 					if (0 < speed) speed = -(maxSpeed + speed) / 5 * bumpyness;
 					break;
 				case deadly_obstacle:
-					SoundEngine->play2D("../_audio/deadly.wav", false);
-					if (!isJumping) state = dead;
-					SoundEngine->play2D("../_audio/dolls.wav", false);
+					if (!isJumping) {
+						SoundEngine->play2D("../_audio/deadly.wav", false);
+						state = dead;
+						SoundEngine->play2D("../_audio/dolls.wav", false);
+					}
 					break;
 				case collectable:
 					SoundEngine->play2D("../_audio/collectable.wav", false);
@@ -516,7 +518,7 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 		case 32:
 			if (!isJumping) {
 				isJumping = true;
-				//da aggiungere animazione salto
+				SoundEngine->play2D("../_audio/jump.wav", false);
 			}
 			break;
 			//reset

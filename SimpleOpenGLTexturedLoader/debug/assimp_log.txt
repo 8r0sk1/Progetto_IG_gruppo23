@@ -1,2 +1,2 @@
-Info,  T3536: Load C:\Users\StroboPC\Desktop\progetto_IG\triciclo_example.obj
-Error, T3536: Unable to open file "C:\Users\StroboPC\Desktop\progetto_IG\triciclo_example.obj".
+Info,  T16840: Load C:\Users\StroboPC\Desktop\progetto_IG\triciclo_example.obj
+Error, T16840: Unable to open file "C:\Users\StroboPC\Desktop\progetto_IG\triciclo_example.obj".
