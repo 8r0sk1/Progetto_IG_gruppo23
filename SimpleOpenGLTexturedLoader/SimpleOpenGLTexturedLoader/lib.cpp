@@ -37,7 +37,7 @@ void output(float x, float y, std::string str)
 }
 
 void renderFps(int fps) {
-	output(-4.5f, -3.f, to_string(fps) + " fps");
+	//output(-4.5f, -3.f, to_string(fps) + " fps");
 }
 
 void renderUI(float velocity_str, float time_str, float balls_str)

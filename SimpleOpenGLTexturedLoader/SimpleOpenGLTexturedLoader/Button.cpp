@@ -10,6 +10,7 @@ Button::Button() {
 	bType = bPlay;
 	toRender = true;
 	isMouseOn = false;
+	buttonActive = false;
 }
 
 Button::Button(float pos_x, float pos_z, float l_x, float l_z, button_type type) {
@@ -22,4 +23,5 @@ Button::Button(float pos_x, float pos_z, float l_x, float l_z, button_type type)
 	bType = type;
 	toRender = true;
 	isMouseOn = false;
+	buttonActive = false;
 }

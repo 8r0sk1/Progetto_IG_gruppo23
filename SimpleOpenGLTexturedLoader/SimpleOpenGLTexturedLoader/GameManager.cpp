@@ -470,10 +470,15 @@ void GameManager::mouseMotion(int x, int y){
 	for (int i = 0; i < bObj_dim; i++) {
 		if (bObj[i].isColliding(xf, yf)) {
 			bObj[i].isMouseOn = true;
+			if (!bObj[i].buttonActive) SoundEngine->play2D("../_audio/menu.wav", false);
+			bObj[i].buttonActive = true;
 			//DEBUG
 			//printf("Mouse is on: button %d\n",i);
 		}
-		else bObj[i].isMouseOn = false;
+		else {
+			bObj[i].isMouseOn = false;
+			bObj[i].buttonActive = false;
+		}
 		glutPostRedisplay();
 	}
 }
@@ -562,15 +567,15 @@ void GameManager::inputManager(unsigned char key, int x, int y) {
 			get3Dpos(&xf, &yf);
 			//DEBUG
 			//printf("Mouse clicked in (%f,%f)\n", xf,yf);
-
+			
 			for (int i = 0; i < bObj_dim; i++) {
 				if (bObj[i].isColliding(xf,yf)){
+					SoundEngine->play2D("../_audio/menu.wav", false);
 
 					//deactivate images (not background -> index 0)
 					for (int index = 1; index < images_dim; index++) {
 						images[index].toRender = false;
 					}
-					SoundEngine->play2D("../_audio/menu.wav", false);
 					//controllo quale bottone è clicked
 					switch ((int)bObj[i].bType) {
 					case bPlay:
